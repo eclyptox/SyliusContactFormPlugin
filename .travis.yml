@@ -16,18 +16,17 @@ cache:
 env:
     global:
         - APP_ENV=test
-        - APP_SECRET=f686gsd5v1321
         - SYLIUS_CACHE_DIR=$HOME/.sylius-cache
         - SYLIUS_BUILD_DIR=etc/build
 
 matrix:
     include:
         - env:
-            - SYLIUS_VERSION="1.4.*"
+              - SYLIUS_VERSION="1.4.*"
         - env:
-            - SYLIUS_VERSION="1.5.*"
+              - SYLIUS_VERSION="1.5.*"
         - env:
-            - SYLIUS_VERSION="1.6.*"
+              - SYLIUS_VERSION="1.6.*"
 
 before_install:
     - phpenv config-rm xdebug.ini
@@ -53,7 +52,7 @@ script:
     - composer validate --strict
     - ls -la tests/Application/var/cache/test
     - bin/phpstan.sh
-#    - bin/behat
+    # - bin/behat.sh
     - bin/ecs.sh
 
 after_failure:

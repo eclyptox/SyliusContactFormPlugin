@@ -1,0 +1,9 @@
+mango_sylius_extended_contact_form_shop:
+    resource: "@MangoSyliusContactFormPlugin/Resources/config/shopRouting.yml"
+    prefix: /{_locale}
+    requirements:
+        _locale: ^[a-z]{2}(?:_[A-Z]{2})?$
+
+mango_sylius_extended_contact_form_admin:
+    resource: "@MangoSyliusContactFormPlugin/Resources/config/adminRouting.yml"
+    prefix: /admin
