@@ -40,7 +40,7 @@ class ContactFormMessage implements ResourceInterface
     protected $email;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, nullable=false)
      *
      * @var string|null
      * @Assert\NotBlank
@@ -127,22 +127,6 @@ class ContactFormMessage implements ResourceInterface
     }
 
     /**
-     * @return string|null
-     */
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string|null $email
-     */
-    public function setEmail(?string $email): void
-    {
-        $this->email = $email;
-    }
-
-    /**
      * @return \DateTime|null
      */
     public function getSendTime(): ?\DateTime
@@ -156,5 +140,21 @@ class ContactFormMessage implements ResourceInterface
     public function setSendTime(?\DateTime $sendTime): void
     {
         $this->sendTime = $sendTime;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string|null $email
+     */
+    public function setEmail(?string $email): void
+    {
+        $this->email = $email;
     }
 }
