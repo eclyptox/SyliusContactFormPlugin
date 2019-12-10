@@ -7,12 +7,15 @@ mango_sylius:
         message: 'Message'
         success: 'The message was sent with success'
         error: 'An error occurred when sending the message'
+        time: 'Send at %Time%'
+        name: 'From %Name%'
         subject:
             shopManager: 'Message From %CustomerName%'
             customer: 'Message sent'
         ui:
             title: 'Messages'
             subtitle: 'Manage your messages'
+            detailTitle: 'Messages from %Contact%'
         label:
             date: 'Date'
             name: 'Name'

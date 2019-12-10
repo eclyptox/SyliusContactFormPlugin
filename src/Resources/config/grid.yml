@@ -5,6 +5,7 @@ sylius_grid:
           name: doctrine/orm
           options:
             class: MangoSylius\ContactFormPlugin\Entity\ContactFormMessage
+        limits: [10, 25, 50, 100]
         fields:
           sendTime:
             type: datetime
@@ -24,8 +25,10 @@ sylius_grid:
             type: string
             label: mango_sylius.contactForm.label.phone
           message:
-            type: string
+            type: twig
             label: mango_sylius.contactForm.label.message
+            options:
+              template: '@MangoSyliusContactFormPlugin/ContactForm/Grid/message.html.twig'
         sorting:
           sendTime: asc
         filters:

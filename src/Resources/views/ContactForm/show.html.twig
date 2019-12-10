@@ -1,13 +1,17 @@
 {% extends '@SyliusAdmin/layout.html.twig' %}
 
-{% import '@SyliusUi/Macro/buttons.html.twig' as buttons %}
-{% import '@SyliusUi/Macro/table.html.twig' as table %}
-{% import '@SyliusAdmin/Macro/breadcrumb.html.twig' as breadcrumb %}
-{% import '@SyliusUi/Macro/messages.html.twig' as messages %}
-
-{% block title %}{{ 'mango_sylius.contactForm.ui.title'|trans }}{% endblock %}
+{% block title %}{{ 'mango_sylius.contactForm.ui.detailTitle'|trans ({'%Contact%': message.senderName|first })}}{% endblock %}
 
 {% block content %}
+
+
+        <div class="ui segment">
+            {{ 'mango_sylius.contactForm.name'|trans ({'%Name%' : message.senderName})}}
+            </br></br>
+            {{ message.message }}
+            </br></br>
+            {{ 'mango_sylius.contactForm.time'|trans ({'%Time%': message.sendTime|date('Y-m-d H:i:s') })}}
+        </div>
 
 
 {% endblock %}
