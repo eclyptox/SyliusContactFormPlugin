@@ -7,6 +7,7 @@ namespace MangoSylius\ContactFormPlugin\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use MangoSylius\ContactFormPlugin\Entity\ContactFormMessage;
 use MangoSylius\ContactFormPlugin\Form\Type\ContactFormType;
+use ReCaptcha\ReCaptcha;
 use Sylius\Component\Core\Model\AdminUser;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 use Sylius\Component\User\Repository\UserRepositoryInterface;
@@ -70,6 +71,7 @@ final class ContactFormController
     public function createContactMessage(Request $request): Response
     {
         $contact = new ContactFormMessage();
+        $sitekey = $_ENV['RECAPTCHA_SITE_KEY'];
         $form = $this->builder->create(ContactFormType::class, $contact, [
             'action' => $this->router->generate('mango_sylius_contact_form_message_send'),
             'method' => 'POST',
@@ -78,7 +80,9 @@ final class ContactFormController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            if ($form->isValid()) {
+            $recaptcha = new ReCaptcha($_ENV['RECAPTCHA_SECRET_KEY']);
+            $resp = $recaptcha->verify($request->request->get('g-recaptcha-response'), $request->getClientIp());
+            if ($form->isValid() && $resp->isSuccess()) {
                 $contact->setSendTime(new \DateTime());
                 $this->entityManager->persist($contact);
                 $this->entityManager->flush();
@@ -96,6 +100,8 @@ final class ContactFormController
 
         return new Response($this->templatingEngine->render('@MangoSyliusContactFormPlugin/ContactForm/_form.html.twig', [
             'form' => $form->createView(),
+            'key' => $sitekey,
         ]));
     }
+
 }
