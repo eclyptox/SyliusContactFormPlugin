@@ -8,9 +8,6 @@ services:
     tags:
       - { name: form.type }
 
-  MangoSylius\ContactFormPlugin\Menu\ContactMenuBuilder:
-    tags:
-      - { name: kernel.event_listener, event: sylius.menu.admin.main, method: buildMenu }
 
   MangoSylius\ContactFormPlugin\Controller\ContactFormController:
     tags:
@@ -24,6 +21,7 @@ services:
       $builder: '@form.factory'
       $mailer: '@sylius.email_sender'
       $adminUserRepository: '@sylius.repository.admin_user'
+
 
 
 

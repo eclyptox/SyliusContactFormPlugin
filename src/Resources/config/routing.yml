@@ -3,3 +3,4 @@ mango_sylius_contact_form_message_send:
   methods: [POST]
   defaults:
     _controller: MangoSylius\ContactFormPlugin\Controller\ContactFormController:createContactMessage
+

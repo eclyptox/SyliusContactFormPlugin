@@ -4,13 +4,12 @@
             {{ 'mango_sylius.contactForm.title'|trans }}
         </div>
     </h1>
-    {{ form_start(form, {'attr': {'class': 'ui large loadable form'}})  }}
+    {{ form_start(form, {'attr': {'class': 'ui large loadable form'} })  }}
     {{ form_row(form.senderName) }}
     {{ form_row(form.email) }}
     {{ form_row(form.phone) }}
     {{ form_row(form.message) }}
     <br>
-    <div class="g-recaptcha" data-sitekey="{{ key }}"></div>
     <button type="submit" class="ui fluid large primary submit button">{{ 'sylius.ui.send'|trans }}</button>
     {{ form_end(form) }}
 </div>

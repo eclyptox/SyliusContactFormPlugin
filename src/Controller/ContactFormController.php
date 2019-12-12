@@ -7,7 +7,6 @@ namespace MangoSylius\ContactFormPlugin\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use MangoSylius\ContactFormPlugin\Entity\ContactFormMessage;
 use MangoSylius\ContactFormPlugin\Form\Type\ContactFormType;
-use ReCaptcha\ReCaptcha;
 use Sylius\Component\Core\Model\AdminUser;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 use Sylius\Component\User\Repository\UserRepositoryInterface;
@@ -59,19 +58,9 @@ final class ContactFormController
         $this->adminUserRepository = $adminUserRepository;
     }
 
-    public function showMessageAction(int $id)
-    {
-        $contactMessages = $this->entityManager->getRepository(ContactFormMessage::class)->find($id);
-
-        return new Response($this->templatingEngine->render('@MangoSyliusContactFormPlugin/ContactForm/show.html.twig', [
-            'message' => $contactMessages,
-        ]));
-    }
-
     public function createContactMessage(Request $request): Response
     {
         $contact = new ContactFormMessage();
-        $sitekey = $_ENV['RECAPTCHA_SITE_KEY'];
         $form = $this->builder->create(ContactFormType::class, $contact, [
             'action' => $this->router->generate('mango_sylius_contact_form_message_send'),
             'method' => 'POST',
@@ -80,16 +69,12 @@ final class ContactFormController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $recaptcha = new ReCaptcha($_ENV['RECAPTCHA_SECRET_KEY']);
-            $resp = $recaptcha->verify($request->request->get('g-recaptcha-response'), $request->getClientIp());
-            if ($form->isValid() && $resp->isSuccess()) {
+            if ($form->isValid()) {
                 $contact->setSendTime(new \DateTime());
                 $this->entityManager->persist($contact);
                 $this->entityManager->flush();
                 $SM = $this->adminUserRepository->find(1);
                 assert($SM instanceof AdminUser);
-                $this->mailer->send('contact_shop_manager_mail', [$SM->getEmail()], ['contact' => $contact]);
-                $this->mailer->send('contact_customer', [$contact->getEmail()], ['contact' => $contact]);
                 $this->flashBag->add('success', $this->translator->trans('mango_sylius.contactForm.success'));
             } else {
                 $this->flashBag->add('error', $this->translator->trans('mango_sylius.contactForm.error'));
@@ -100,7 +85,6 @@ final class ContactFormController
 
         return new Response($this->templatingEngine->render('@MangoSyliusContactFormPlugin/ContactForm/_form.html.twig', [
             'form' => $form->createView(),
-            'key' => $sitekey,
         ]));
     }
 }
