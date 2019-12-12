@@ -103,5 +103,4 @@ final class ContactFormController
             'key' => $sitekey,
         ]));
     }
-
 }
