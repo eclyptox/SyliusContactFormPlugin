@@ -71,7 +71,6 @@ final class ContactFormController
     public function createContactMessage(Request $request): Response
     {
         $contact = new ContactFormMessage();
-        $sitekey = $_ENV['RECAPTCHA_SITE_KEY'];
         $form = $this->builder->create(ContactFormType::class, $contact, [
             'action' => $this->router->generate('mango_sylius_contact_form_message_send'),
             'method' => 'POST',
@@ -80,9 +79,7 @@ final class ContactFormController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $recaptcha = new ReCaptcha($_ENV['RECAPTCHA_SECRET_KEY']);
-            $resp = $recaptcha->verify($request->request->get('g-recaptcha-response'), $request->getClientIp());
-            if ($form->isValid() && $resp->isSuccess()) {
+            if ($form->isValid()) {
                 $contact->setSendTime(new \DateTime());
                 $this->entityManager->persist($contact);
                 $this->entityManager->flush();
@@ -100,7 +97,6 @@ final class ContactFormController
 
         return new Response($this->templatingEngine->render('@MangoSyliusContactFormPlugin/ContactForm/_form.html.twig', [
             'form' => $form->createView(),
-            'key' => $sitekey,
         ]));
     }
 }
