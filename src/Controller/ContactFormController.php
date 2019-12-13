@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\ContactFormPlugin\Controller;
+namespace MangoSylius\SyliusContactFormPlugin\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use MangoSylius\ContactFormPlugin\Entity\ContactFormMessage;
-use MangoSylius\ContactFormPlugin\Form\Type\ContactFormType;
-use Sylius\Component\Core\Model\AdminUser;
+use MangoSylius\SyliusContactFormPlugin\Entity\ContactFormMessage;
+use MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 use Sylius\Component\User\Repository\UserRepositoryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -70,13 +69,11 @@ final class ContactFormController
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $contact->setSendTime(new \DateTime());
+                $contact->setCreatedAt(new \DateTime());
+                $contact->setClientIP($request->getClientIp());
+                $contact->setUserAgent($request->headers->get('User-Agent'));
                 $this->entityManager->persist($contact);
                 $this->entityManager->flush();
-                $SM = $this->adminUserRepository->find(1);
-                assert($SM instanceof AdminUser);
-                $this->mailer->send('contact_shop_manager_mail', [$SM->getEmail()], ['contact' => $contact]);
-                $this->mailer->send('contact_customer', [$contact->getEmail()], ['contact' => $contact]);
                 $this->flashBag->add('success', $this->translator->trans('mango_sylius.contactForm.success'));
             } else {
                 $this->flashBag->add('error', $this->translator->trans('mango_sylius.contactForm.error'));

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\ContactFormPlugin\Entity;
+namespace MangoSylius\SyliusContactFormPlugin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\ResourceInterface;
@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="app_contact_form")
+ * @ORM\Table(name="app_contact_form_message")
  */
 class ContactFormMessage implements ResourceInterface
 {
@@ -22,6 +22,20 @@ class ContactFormMessage implements ResourceInterface
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string|null
+     */
+    protected $clientIP;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string|null
+     */
+    protected $userAgent;
 
     /**
      * @ORM\Column(type="string", nullable=false)
@@ -60,7 +74,7 @@ class ContactFormMessage implements ResourceInterface
      *
      * @var \DateTime|null
      */
-    protected $sendTime;
+    protected $createdAt;
 
     /**
      * @return int
@@ -129,17 +143,17 @@ class ContactFormMessage implements ResourceInterface
     /**
      * @return \DateTime|null
      */
-    public function getSendTime(): ?\DateTime
+    public function getCreatedAt(): ?\DateTime
     {
-        return $this->sendTime;
+        return $this->createdAt;
     }
 
     /**
-     * @param \DateTime|null $sendTime
+     * @param \DateTime|null $createdAt
      */
-    public function setSendTime(?\DateTime $sendTime): void
+    public function setCreatedAt(?\DateTime $createdAt): void
     {
-        $this->sendTime = $sendTime;
+        $this->createdAt = $createdAt;
     }
 
     /**
@@ -156,5 +170,37 @@ class ContactFormMessage implements ResourceInterface
     public function setEmail(?string $email): void
     {
         $this->email = $email;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getClientIP(): ?string
+    {
+        return $this->clientIP;
+    }
+
+    /**
+     * @param string|null $clientIP
+     */
+    public function setClientIP(?string $clientIP): void
+    {
+        $this->clientIP = $clientIP;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUserAgent(): ?string
+    {
+        return $this->userAgent;
+    }
+
+    /**
+     * @param string|null $userAgent
+     */
+    public function setUserAgent(?string $userAgent): void
+    {
+        $this->userAgent = $userAgent;
     }
 }

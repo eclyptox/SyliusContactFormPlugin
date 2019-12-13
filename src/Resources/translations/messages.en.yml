@@ -7,6 +7,3 @@ mango_sylius:
         message: 'Message'
         success: 'The message was sent with success'
         error: 'An error occurred when sending the message'
-        subject:
-            shopManager: 'Message From %CustomerName%'
-            customer: 'Message sent'

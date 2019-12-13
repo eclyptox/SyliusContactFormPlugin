@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\ContactFormPlugin\Form\Type;
+namespace MangoSylius\SyliusContactFormPlugin\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -30,9 +30,9 @@ class ContactFormType extends AbstractType
             ])
             ->add('message', TextareaType::class, [
                 'label' => '',
+                'required' => true,
                 'attr' => [
                     'placeholder' => 'mango_sylius.contactForm.message',
-                    'required' => true,
                 ],
             ]);
     }
