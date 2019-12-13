@@ -29,7 +29,7 @@ Contact Form Plugin
 1. Run `$ composer require mangoweb-sylius/sylius-contact-form-plugin`.
 2. Register `\MangoSylius\ContactFormPlugin\MangoSyliusContactFormPlugin` in your Kernel.
 3. Import `@MangoSyliusContactFormPlugin/Resources/config/routing.yml` in the routing.yml.
-4. Import `@MangoSyliusContactFormPlugin/Resources/config/mailer.yml` and `@MangoSyliusContactFormPlugin/Resources/config/resources.yml` in _sylius.yml.
+4. Import `@MangoSyliusContactFormPlugin/Resources/config/resources.yml` in _sylius.yml.
 
 ## Usage
 
