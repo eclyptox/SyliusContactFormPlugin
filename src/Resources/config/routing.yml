@@ -1,6 +1,5 @@
 mango_sylius_contact_form_message_send:
-  path: contactform/send
-  methods: [POST]
-  defaults:
-    _controller: MangoSylius\SyliusContactFormPlugin\Controller\ContactFormController:createContactMessage
-
+    path: contactform/send
+    methods: [POST]
+    defaults:
+        _controller: MangoSylius\SyliusContactFormPlugin\Controller\ContactFormController:createContactMessage

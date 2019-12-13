@@ -7,8 +7,6 @@ namespace MangoSylius\SyliusContactFormPlugin\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use MangoSylius\SyliusContactFormPlugin\Entity\ContactFormMessage;
 use MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType;
-use Sylius\Component\Mailer\Sender\SenderInterface;
-use Sylius\Component\User\Repository\UserRepositoryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,35 +24,27 @@ final class ContactFormController
     private $templatingEngine;
     /** @var EntityManagerInterface */
     private $entityManager;
-    /** @var SenderInterface */
-    private $mailer;
     /** @var RouterInterface */
     private $router;
     /** @var FlashBagInterface */
     private $flashBag;
     /** @var FormFactoryInterface */
     private $builder;
-    /** @var UserRepositoryInterface */
-    private $adminUserRepository;
 
     public function __construct(
         TranslatorInterface $translator,
         EngineInterface $templatingEngine,
         EntityManagerInterface $entityManager,
-        SenderInterface $mailer,
         RouterInterface $router,
         FlashBagInterface $flashBag,
-        FormFactoryInterface $builder,
-        UserRepositoryInterface $adminUserRepository
+        FormFactoryInterface $builder
     ) {
         $this->translator = $translator;
         $this->templatingEngine = $templatingEngine;
         $this->entityManager = $entityManager;
-        $this->mailer = $mailer;
         $this->router = $router;
         $this->flashBag = $flashBag;
         $this->builder = $builder;
-        $this->adminUserRepository = $adminUserRepository;
     }
 
     public function createContactMessage(Request $request): Response

@@ -1,22 +1,20 @@
 services:
     _defaults:
-      autowire: false
-      autoconfigure: false
-      public: false
+        autowire: false
+        autoconfigure: false
+        public: false
 
     MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType:
-      tags:
-        - { name: form.type }
+        tags:
+            - { name: form.type }
 
     MangoSylius\SyliusContactFormPlugin\Controller\ContactFormController:
-      tags:
-        - { name: controller.service_arguments }
-      arguments:
-        $router: '@router'
-        $flashBag: '@session.flash_bag'
-        $translator: '@translator'
-        $entityManager: '@doctrine.orm.entity_manager'
-        $templatingEngine: '@templating'
-        $builder: '@form.factory'
-        $mailer: '@sylius.email_sender'
-        $adminUserRepository: '@sylius.repository.admin_user'
+        tags:
+            - { name: controller.service_arguments }
+        arguments:
+            $router: '@router'
+            $flashBag: '@session.flash_bag'
+            $translator: '@translator'
+            $entityManager: '@doctrine.orm.entity_manager'
+            $templatingEngine: '@templating'
+            $builder: '@form.factory'

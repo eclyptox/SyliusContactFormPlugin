@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="app_contact_form_message")
+ * @ORM\Table(name="mango_contact_form_message")
  */
 class ContactFormMessage implements ResourceInterface
 {
