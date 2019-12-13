@@ -1,0 +1,10 @@
+{% block subject %}
+    {{ 'mango_sylius.contactForm.subject.shopManager'|trans({'%CustomerName%': contact.senderName}) }}
+{% endblock %}
+
+{% block body %}
+    {% autoescape %}
+        {{ contact.message }}
+    {% endautoescape %}
+{% endblock %}
+
