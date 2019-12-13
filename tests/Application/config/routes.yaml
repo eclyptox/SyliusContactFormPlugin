@@ -1,0 +1,5 @@
+mango_sylius_contact_form_admin:
+    resource: "@MangoSyliusContactFormPlugin/Resources/config/routing.yml"
+    prefix: /{_locale}
+    requirements:
+        _locale: ^[a-z]{2}(?:_[A-Z]{2})?$
