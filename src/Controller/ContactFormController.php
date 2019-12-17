@@ -7,7 +7,6 @@ namespace MangoSylius\ContactFormPlugin\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use MangoSylius\ContactFormPlugin\Entity\ContactFormMessage;
 use MangoSylius\ContactFormPlugin\Form\Type\ContactFormType;
-use ReCaptcha\ReCaptcha;
 use Sylius\Component\Core\Model\AdminUser;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 use Sylius\Component\User\Repository\UserRepositoryInterface;
