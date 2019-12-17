@@ -7,7 +7,8 @@ namespace MangoSylius\ContactFormPlugin\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use MangoSylius\ContactFormPlugin\Entity\ContactFormMessage;
 use MangoSylius\ContactFormPlugin\Form\Type\ContactFormType;
-use Sylius\Component\Core\Model\AdminUser;
+use Sylius\Component\Channel\Context\ChannelContextInterface;
+use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 use Sylius\Component\User\Repository\UserRepositoryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -18,6 +19,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Webmozart\Assert\Assert;
 
 final class ContactFormController
 {
@@ -37,6 +39,8 @@ final class ContactFormController
     private $builder;
     /** @var UserRepositoryInterface */
     private $adminUserRepository;
+    /** @var ChannelContextInterface */
+    private $channelContext;
 
     public function __construct(
         TranslatorInterface $translator,
@@ -46,7 +50,8 @@ final class ContactFormController
         RouterInterface $router,
         FlashBagInterface $flashBag,
         FormFactoryInterface $builder,
-        UserRepositoryInterface $adminUserRepository
+        UserRepositoryInterface $adminUserRepository,
+        ChannelContextInterface $channelContext
     ) {
         $this->translator = $translator;
         $this->templatingEngine = $templatingEngine;
@@ -56,6 +61,7 @@ final class ContactFormController
         $this->flashBag = $flashBag;
         $this->builder = $builder;
         $this->adminUserRepository = $adminUserRepository;
+        $this->channelContext = $channelContext;
     }
 
     public function createContactMessage(Request $request): Response
@@ -73,9 +79,14 @@ final class ContactFormController
                 $contact->setSendTime(new \DateTime());
                 $this->entityManager->persist($contact);
                 $this->entityManager->flush();
-                $SM = $this->adminUserRepository->find(1);
-                assert($SM instanceof AdminUser);
-                $this->mailer->send('contact_shop_manager_mail', [$SM->getEmail()], ['contact' => $contact]);
+
+                $channel = $this->channelContext->getChannel();
+                Assert::isInstanceOf($channel, ChannelInterface::class);
+                $contactEmail = $channel->getContactEmail();
+
+                if ($contactEmail !== null) {
+                    $this->mailer->send('contact_shop_manager_mail', [$contactEmail], ['contact' => $contact]);
+                }
                 $this->mailer->send('contact_customer', [$contact->getEmail()], ['contact' => $contact]);
                 $this->flashBag->add('success', $this->translator->trans('mango_sylius.contactForm.success'));
             } else {

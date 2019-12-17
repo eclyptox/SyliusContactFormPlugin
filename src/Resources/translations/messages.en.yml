@@ -8,5 +8,5 @@ mango_sylius:
         success: 'The message was sent with success'
         error: 'An error occurred when sending the message'
         subject:
-            shopManager: 'Message From %CustomerName%'
+            shopManager: 'Message From %customerName%'
             customer: 'Message sent'

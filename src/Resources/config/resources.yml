@@ -1,7 +1,0 @@
-sylius_resource:
-  resources:
-    mango_contact_form_plugin.contact_form_message:
-      classes:
-        model: MangoSylius\ContactFormPlugin\Entity\ContactFormMessage
-        form: MangoSylius\ContactFormPlugin\Form\Type\ContactFormType
-
