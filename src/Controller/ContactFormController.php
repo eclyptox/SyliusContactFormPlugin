@@ -81,7 +81,7 @@ final class ContactFormController
                 $this->entityManager->flush();
 
                 $channel = $this->channelContext->getChannel();
-                Assert::isInstanceOf($channel, ChannelInterface::class);
+                assert($channel instanceof ChannelInterface);
                 $contactEmail = $channel->getContactEmail();
 
                 if ($contactEmail !== null) {
