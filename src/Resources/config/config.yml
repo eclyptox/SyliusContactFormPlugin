@@ -1,17 +1,3 @@
-sylius_resource:
-  resources:
-    mango_contact_form_plugin.contact_form_message:
-      classes:
-        model: MangoSylius\ContactFormPlugin\Entity\ContactFormMessage
-        form: MangoSylius\ContactFormPlugin\Form\Type\ContactFormType
-
-sylius_mailer:
-  emails:
-    contact_shop_manager_mail:
-      subject: 'Message sent'
-      template: "@MangoSyliusContactFormPlugin/ContactForm/ContactFormShopManagerEmail.html.twig"
-
-    contact_customer:
-      subject: 'Message sent'
-      template: "@MangoSyliusContactFormPlugin/ContactForm/ContactFormCustomerEmail.html.twig"
-
+imports:
+  - { resource: "@MangoSyliusContactFormPlugin/Resources/config/ressources.yml" }
+  - { resource: "@MangoSyliusContactFormPlugin/Resources/config/mailer.yml" }

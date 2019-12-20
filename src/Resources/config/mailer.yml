@@ -1,0 +1,10 @@
+sylius_mailer:
+  emails:
+    contact_shop_manager_mail:
+      subject: 'Message sent'
+      template: "@MangoSyliusContactFormPlugin/ContactForm/ContactFormShopManagerEmail.html.twig"
+
+    contact_customer:
+      subject: 'Message sent'
+      template: "@MangoSyliusContactFormPlugin/ContactForm/ContactFormCustomerEmail.html.twig"
+
