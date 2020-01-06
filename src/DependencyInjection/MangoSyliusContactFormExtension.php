@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\ContactFormPlugin\DependencyInjection;
+namespace MangoSylius\SyliusContactFormPlugin\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

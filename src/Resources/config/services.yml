@@ -4,12 +4,12 @@ services:
     autoconfigure: false
     public: false
 
-  MangoSylius\ContactFormPlugin\Form\Type\ContactFormType:
+  MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType:
     tags:
       - { name: form.type }
 
 
-  MangoSylius\ContactFormPlugin\Controller\ContactFormController:
+  MangoSylius\SyliusContactFormPlugin\Controller\ContactFormController:
     tags:
       - { name: controller.service_arguments }
     arguments:

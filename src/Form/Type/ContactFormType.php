@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\ContactFormPlugin\Form\Type;
+namespace MangoSylius\SyliusContactFormPlugin\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
