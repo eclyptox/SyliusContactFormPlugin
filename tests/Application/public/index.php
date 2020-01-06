@@ -1,6 +1,6 @@
 <?php
 
-use Tests\MangoSylius\ContactFormPlugin\Application\Kernel;
+use Tests\MangoSylius\SyliusContactFormPlugin\Application\Kernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
