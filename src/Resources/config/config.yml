@@ -1,0 +1,3 @@
+imports:
+  - { resource: "@MangoSyliusContactFormPlugin/Resources/config/ressources.yml" }
+  - { resource: "@MangoSyliusContactFormPlugin/Resources/config/mailer.yml" }

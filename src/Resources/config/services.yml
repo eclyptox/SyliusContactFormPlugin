@@ -21,6 +21,7 @@ services:
       $builder: '@form.factory'
       $mailer: '@sylius.email_sender'
       $adminUserRepository: '@sylius.repository.admin_user'
+      $channelContext: '@sylius.context.channel'
 
 
 
