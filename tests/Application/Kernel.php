@@ -80,11 +80,6 @@ final class Kernel extends BaseKernel
         return parent::getContainerBaseClass();
     }
 
-    protected function getContainerClass()
-    {
-        return 'testContainer';
-    }
-
     protected function getContainerLoader(ContainerInterface $container): LoaderInterface
     {
         /** @var ContainerBuilder $container */
