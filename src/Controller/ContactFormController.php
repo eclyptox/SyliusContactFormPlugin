@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MangoSylius\ContactFormPlugin\Controller;
+namespace MangoSylius\SyliusContactFormPlugin\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use MangoSylius\ContactFormPlugin\Entity\ContactFormMessage;
-use MangoSylius\ContactFormPlugin\Form\Type\ContactFormType;
+use MangoSylius\SyliusContactFormPlugin\Entity\ContactFormMessage;
+use MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Mailer\Sender\SenderInterface;
