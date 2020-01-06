@@ -66,6 +66,7 @@ final class ContactFormController
     public function showMessageAction(int $id)
     {
         $contactMessages = $this->entityManager->getRepository(ContactFormMessage::class)->find($id);
+
         return new Response($this->templatingEngine->render('@MangoSyliusContactFormPlugin/ContactForm/show.html.twig', [
             'message' => $contactMessages,
         ]));

@@ -12,7 +12,7 @@ services:
     tags:
       - { name: kernel.event_listener, event: sylius.menu.admin.main, method: buildMenu }
 
-  MMangoSylius\SyliusContactFormPlugin\Controller\ContactFormController:
+  MangoSylius\SyliusContactFormPlugin\Controller\ContactFormController:
     tags:
       - { name: controller.service_arguments }
     arguments:
