@@ -25,6 +25,7 @@ services:
       $mailer: '@sylius.email_sender'
       $adminUserRepository: '@sylius.repository.admin_user'
       $channelContext: '@sylius.context.channel'
+      $contactFormRepository: '@mango_contact_form_plugin.repository.message'
 
 
 
