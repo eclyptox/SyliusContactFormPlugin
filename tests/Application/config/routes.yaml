@@ -4,6 +4,6 @@ acme_sylius_example_shop:
     requirements:
         _locale: ^[a-z]{2}(?:_[A-Z]{2})?$
 
-mango_sylius_order_comment_plugin_admin:
+acme_sylius_example_admin:
     resource: "@MangoSyliusContactFormPlugin/Resources/config/adminRouting.yml"
     prefix: /admin
