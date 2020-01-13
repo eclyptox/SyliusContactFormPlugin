@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use MangoSylius\SyliusContactFormPlugin\Entity\ContactFormMessage;
 use MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType;
 use MangoSylius\SyliusContactFormPlugin\Repository\ContactMessageRepository;
+use ReCaptcha\ReCaptcha;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Mailer\Sender\SenderInterface;
@@ -44,6 +45,9 @@ final class ContactFormController
     /** @var ContactMessageRepository */
     private $contactFormRepository;
 
+    private $recaptchaPublic;
+    private $recaptchaSecret;
+
     public function __construct(
         TranslatorInterface $translator,
         EngineInterface $templatingEngine,
@@ -54,7 +58,9 @@ final class ContactFormController
         FormFactoryInterface $builder,
         UserRepositoryInterface $adminUserRepository,
         ChannelContextInterface $channelContext,
-        ContactMessageRepository $contactFormRepository
+        ContactMessageRepository $contactFormRepository,
+        string $recaptchaPublic,
+        string $recaptchaSecret
     ) {
         $this->translator = $translator;
         $this->templatingEngine = $templatingEngine;
@@ -66,6 +72,8 @@ final class ContactFormController
         $this->adminUserRepository = $adminUserRepository;
         $this->channelContext = $channelContext;
         $this->contactFormRepository = $contactFormRepository;
+        $this->recaptchaPublic = $recaptchaPublic;
+        $this->recaptchaSecret = $recaptchaSecret;
     }
 
     public function showMessageAction(int $id)
@@ -88,6 +96,11 @@ final class ContactFormController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
+            if ($this->recaptchaPublic != null || $this->recaptchaSecret != null) {
+                $recaptcha = new ReCaptcha($this->recaptchaSecret);
+                $resp = $recaptcha->verify($request->request->get('g-recaptcha-response'), $request->getClientIp());
+                assert($resp->isSuccess());
+            }
             if ($form->isValid()) {
                 $contact->setSendTime(new \DateTime());
                 $this->entityManager->persist($contact);
@@ -111,6 +124,7 @@ final class ContactFormController
 
         return new Response($this->templatingEngine->render('@MangoSyliusContactFormPlugin/ContactForm/_form.html.twig', [
             'form' => $form->createView(),
+            'key' => $this->recaptchaPublic,
         ]));
     }
 }
