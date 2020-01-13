@@ -1,0 +1,51 @@
+sylius_grid:
+  grids:
+      mango_sylius_admin_contact_message:
+        driver:
+          name: doctrine/orm
+          options:
+            class: MangoSylius\SyliusContactFormPlugin\Entity\ContactFormMessage
+        limits: [10, 25, 50, 100]
+        fields:
+          sendTime:
+            type: datetime
+            label: mango_sylius.contactForm.label.date
+            sortable: ~
+            options:
+              format: d-m-Y H:i:s
+          senderName:
+            type: string
+            sortable: ~
+            label: mango_sylius.contactForm.label.name
+          email:
+            type: string
+            sortable: ~
+            label: mango_sylius.contactForm.label.email
+          phone:
+            type: string
+            label: mango_sylius.contactForm.label.phone
+          message:
+            type: twig
+            label: mango_sylius.contactForm.label.message
+            options:
+              template: '@MangoSyliusContactFormPlugin/ContactForm/Grid/message.html.twig'
+        sorting:
+          sendTime: asc
+        filters:
+          search:
+            type: string
+            options:
+              fields: [senderName, email, message]
+        actions:
+          main:
+            create:
+              type: create
+          item:
+            show_message:
+              type: show
+              label: mango_contact_form_plugin.ui.show_message
+              options:
+                link:
+                  route: mango_sylius_admin_contact_show
+                  parameters:
+                    id: resource.id

@@ -7,6 +7,7 @@ namespace MangoSylius\SyliusContactFormPlugin\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use MangoSylius\SyliusContactFormPlugin\Entity\ContactFormMessage;
 use MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType;
+use MangoSylius\SyliusContactFormPlugin\Repository\ContactMessageRepository;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Mailer\Sender\SenderInterface;
@@ -19,7 +20,6 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Webmozart\Assert\Assert;
 
 final class ContactFormController
 {
@@ -41,6 +41,8 @@ final class ContactFormController
     private $adminUserRepository;
     /** @var ChannelContextInterface */
     private $channelContext;
+    /** @var ContactMessageRepository */
+    private $contactFormRepository;
 
     public function __construct(
         TranslatorInterface $translator,
@@ -51,7 +53,8 @@ final class ContactFormController
         FlashBagInterface $flashBag,
         FormFactoryInterface $builder,
         UserRepositoryInterface $adminUserRepository,
-        ChannelContextInterface $channelContext
+        ChannelContextInterface $channelContext,
+        ContactMessageRepository $contactFormRepository
     ) {
         $this->translator = $translator;
         $this->templatingEngine = $templatingEngine;
@@ -62,6 +65,16 @@ final class ContactFormController
         $this->builder = $builder;
         $this->adminUserRepository = $adminUserRepository;
         $this->channelContext = $channelContext;
+        $this->contactFormRepository = $contactFormRepository;
+    }
+
+    public function showMessageAction(int $id)
+    {
+        $contactMessages = $this->contactFormRepository->find($id);
+
+        return new Response($this->templatingEngine->render('@MangoSyliusContactFormPlugin/ContactForm/show.html.twig', [
+            'message' => $contactMessages,
+        ]));
     }
 
     public function createContactMessage(Request $request): Response
