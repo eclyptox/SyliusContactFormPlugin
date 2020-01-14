@@ -48,7 +48,6 @@ final class ContactFormController
     private $recaptchaPublic;
     private $recaptchaSecret;
 
-
     public function __construct(
         TranslatorInterface $translator,
         EngineInterface $templatingEngine,
@@ -62,7 +61,6 @@ final class ContactFormController
         ContactMessageRepository $contactFormRepository,
         string $recaptchaPublic,
         string $recaptchaSecret
-
     ) {
         $this->translator = $translator;
         $this->templatingEngine = $templatingEngine;
@@ -76,7 +74,6 @@ final class ContactFormController
         $this->contactFormRepository = $contactFormRepository;
         $this->recaptchaPublic = $recaptchaPublic;
         $this->recaptchaSecret = $recaptchaSecret;
-
     }
 
     public function showMessageAction(int $id)
