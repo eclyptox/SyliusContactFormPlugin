@@ -100,7 +100,7 @@ final class ContactFormController
             if ($this->recaptchaPublic != null || $this->recaptchaSecret != null) {
                 $recaptcha = new ReCaptcha($this->recaptchaSecret);
                 $resp = $recaptcha->verify($request->request->get('g-recaptcha-response'), $request->getClientIp());
-                if (!$resp->isSuccess()){
+                if (!$resp->isSuccess()) {
                     $form->addError(new FormError($this->translator->trans('mango_sylius.contactForm.error.recaptcha')));
                 }
             }
@@ -118,15 +118,10 @@ final class ContactFormController
                 }
                 $this->mailer->send('contact_customer', [$contact->getEmail()], ['contact' => $contact]);
                 $this->flashBag->add('success', $this->translator->trans('mango_sylius.contactForm.success'));
+            } else {
+                $this->flashBag->add('error', $this->translator->trans('mango_sylius.contactForm.error.form'));
             }
-            else{
-                if($form->getErrors()){
-                    $this->flashBag->add('error', $this->translator->trans($form->getErrors()));
-                }
-                else{
-                    $this->flashBag->add('error', $this->translator->trans('mango_sylius.contactForm.error.form'));
-                }
-            }
+
             return new RedirectResponse($this->router->generate('sylius_shop_contact_request'));
         }
 
