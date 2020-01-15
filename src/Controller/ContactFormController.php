@@ -13,6 +13,7 @@ use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 use Sylius\Component\User\Repository\UserRepositoryInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,7 +100,9 @@ final class ContactFormController
             if ($this->recaptchaPublic != null || $this->recaptchaSecret != null) {
                 $recaptcha = new ReCaptcha($this->recaptchaSecret);
                 $resp = $recaptcha->verify($request->request->get('g-recaptcha-response'), $request->getClientIp());
-                assert($resp->isSuccess());
+                if (!$resp->isSuccess()){
+                    $form->addError(new FormError($this->translator->trans('mango_sylius.contactForm.error.recaptcha')));
+                }
             }
             if ($form->isValid()) {
                 $contact->setSendTime(new \DateTime());
@@ -115,10 +118,15 @@ final class ContactFormController
                 }
                 $this->mailer->send('contact_customer', [$contact->getEmail()], ['contact' => $contact]);
                 $this->flashBag->add('success', $this->translator->trans('mango_sylius.contactForm.success'));
-            } else {
-                $this->flashBag->add('error', $this->translator->trans('mango_sylius.contactForm.error'));
             }
-
+            else{
+                if($form->getErrors()){
+                    $this->flashBag->add('error', $this->translator->trans($form->getErrors()));
+                }
+                else{
+                    $this->flashBag->add('error', $this->translator->trans('mango_sylius.contactForm.error.form'));
+                }
+            }
             return new RedirectResponse($this->router->generate('sylius_shop_contact_request'));
         }
 
