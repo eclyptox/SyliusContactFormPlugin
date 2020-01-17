@@ -51,6 +51,8 @@ final class ContactFormController
     /** @var TokenStorageInterface */
     private $token;
 
+    private $sendManager;
+    private $sendCustomer;
     private $recaptchaPublic;
     private $recaptchaSecret;
 
@@ -66,6 +68,8 @@ final class ContactFormController
         ChannelContextInterface $channelContext,
         ContactMessageRepository $contactFormRepository,
         TokenStorageInterface $tokenStorage,
+        bool $sendManager,
+        bool $sendCustomer,
         string $recaptchaPublic,
         string $recaptchaSecret
     ) {
@@ -79,9 +83,11 @@ final class ContactFormController
         $this->adminUserRepository = $adminUserRepository;
         $this->channelContext = $channelContext;
         $this->contactFormRepository = $contactFormRepository;
+        $this->token = $tokenStorage;
+        $this->sendManager = $sendManager;
+        $this->sendCustomer = $sendCustomer;
         $this->recaptchaPublic = $recaptchaPublic;
         $this->recaptchaSecret = $recaptchaSecret;
-        $this->token = $tokenStorage;
     }
 
     public function showMessageAction(int $id)
@@ -132,10 +138,12 @@ final class ContactFormController
                 assert($channel instanceof ChannelInterface);
                 $contactEmail = $channel->getContactEmail();
 
-                if ($contactEmail !== null) {
+                if ($contactEmail !== null && $this->sendManager !== false) {
                     $this->mailer->send('contact_shop_manager_mail', [$contactEmail], ['contact' => $contact]);
                 }
-                $this->mailer->send('contact_customer', [$contact->getEmail()], ['contact' => $contact]);
+                if ($this->sendCustomer !== false) {
+                    $this->mailer->send('contact_customer', [$contact->getEmail()], ['contact' => $contact]);
+                }
                 $this->flashBag->add('success', $this->translator->trans('mango_sylius.contactForm.success'));
             } else {
                 $this->flashBag->add('error', $this->translator->trans('mango_sylius.contactForm.error.form'));

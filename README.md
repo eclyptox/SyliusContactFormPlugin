@@ -34,6 +34,12 @@ Contact Form Plugin
 6. Define parameters in `.env` file
 
     ```
+    # Define if an email should be send to the customer
+    SEND_CUSTOMER_MAIL=
+    # Define 'name' field requirement in contact form
+    CONTACT_NAME_REQUIRED=
+    # Define 'phone' field requirement in contact form
+    CONTACT_PHONE_REQUIRED=
     # Recaptcha public key setter for contact form
     RECAPTCHA_PUBLIC_KEY=
     # Recaptcha secret key setter for contact form

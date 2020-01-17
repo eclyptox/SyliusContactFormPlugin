@@ -7,6 +7,9 @@ services:
   MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType:
     tags:
       - { name: form.type }
+    arguments:
+      $nameRequired: '%env(bool:CONTACT_NAME_REQUIRED)%'
+      $phoneRequired: '%env(bool:CONTACT_PHONE_REQUIRED)%'
 
   MangoSylius\SyliusContactFormPlugin\Menu\ContactMenuBuilder:
     tags:
@@ -27,6 +30,8 @@ services:
       $channelContext: '@sylius.context.channel'
       $contactFormRepository: '@mango_contact_form_plugin.repository.message'
       $tokenStorage: '@security.token_storage'
+      $sendManager: '%env(bool:SEND_MANAGER_MAIL)%'
+      $sendCustomer: '%env(bool:SEND_CUSTOMER_MAIL)%'
       $recaptchaPublic: '%env(string:RECAPTCHA_PUBLIC_KEY)%'
       $recaptchaSecret: '%env(string:RECAPTCHA_SECRET_KEY)%'
 

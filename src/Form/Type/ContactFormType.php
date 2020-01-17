@@ -13,19 +13,25 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ContactFormType extends AbstractType
 {
+    private $nameRequired;
+    private $phoneRequired;
+
+    public function __construct(
+        bool $nameRequired,
+        bool $phoneRequired
+    ) {
+        $this->nameRequired = $nameRequired;
+        $this->phoneRequired = $phoneRequired;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('senderName', TextType::class, [
-                'label' => 'mango_sylius.contactForm.senderName',
-                'required' => true,
-            ])
             ->add('email', EmailType::class, [
                 'label' => 'mango_sylius.contactForm.email',
-                'required' => true,
-            ])
-            ->add('phone', TelType::class, [
-                'label' => 'mango_sylius.contactForm.phone',
+                'attr' => [
+                    'placeholder' => 'mango_sylius.contactForm.required',
+                ],
                 'required' => true,
             ])
             ->add('message', TextareaType::class, [
@@ -35,6 +41,40 @@ class ContactFormType extends AbstractType
                     'required' => true,
                 ],
             ]);
+
+        if ($this->nameRequired !== false) {
+            $builder
+                ->add('senderName', TextType::class, [
+                    'label' => 'mango_sylius.contactForm.senderName',
+                    'attr' => [
+                        'placeholder' => 'mango_sylius.contactForm.required',
+                    ],
+                    'required' => true,
+                ]);
+        } else {
+            $builder
+                ->add('senderName', TextType::class, [
+                    'label' => 'mango_sylius.contactForm.senderName',
+                    'required' => false,
+                ]);
+        }
+
+        if ($this->phoneRequired !== false) {
+            $builder
+                ->add('phone', TelType::class, [
+                    'label' => 'mango_sylius.contactForm.phone',
+                    'attr' => [
+                        'placeholder' => 'mango_sylius.contactForm.required',
+                    ],
+                    'required' => true,
+                ]);
+        } else {
+            $builder
+                ->add('phone', TelType::class, [
+                    'label' => 'mango_sylius.contactForm.phone',
+                    'required' => false,
+                ]);
+        }
     }
 
     /**

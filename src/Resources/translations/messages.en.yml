@@ -1,6 +1,7 @@
 mango_sylius:
     contactForm:
         title: 'contact form'
+        required: 'Required'
         senderName: 'Name'
         email: 'Email'
         phone: 'Phone'
