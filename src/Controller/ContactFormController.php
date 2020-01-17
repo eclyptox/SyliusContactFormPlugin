@@ -50,10 +50,17 @@ final class ContactFormController
     private $contactFormRepository;
     /** @var TokenStorageInterface */
     private $token;
-
+    /** @var bool */
     private $sendManager;
+    /** @var bool */
     private $sendCustomer;
+    /** @var bool */
+    private $nameRequired;
+    /** @var bool */
+    private $phoneRequired;
+    /** @var string */
     private $recaptchaPublic;
+    /** @var string */
     private $recaptchaSecret;
 
     public function __construct(
@@ -70,6 +77,8 @@ final class ContactFormController
         TokenStorageInterface $tokenStorage,
         bool $sendManager,
         bool $sendCustomer,
+        bool $nameRequired,
+        bool $phoneRequired,
         string $recaptchaPublic,
         string $recaptchaSecret
     ) {
@@ -84,6 +93,8 @@ final class ContactFormController
         $this->channelContext = $channelContext;
         $this->contactFormRepository = $contactFormRepository;
         $this->token = $tokenStorage;
+        $this->nameRequired = $nameRequired;
+        $this->phoneRequired = $phoneRequired;
         $this->sendManager = $sendManager;
         $this->sendCustomer = $sendCustomer;
         $this->recaptchaPublic = $recaptchaPublic;
@@ -127,6 +138,16 @@ final class ContactFormController
                 $resp = $recaptcha->verify($request->request->get('g-recaptcha-response'), $request->getClientIp());
                 if (!$resp->isSuccess()) {
                     $form->addError(new FormError($this->translator->trans('mango_sylius.contactForm.error.recaptcha')));
+                }
+            }
+            if ($this->nameRequired !== false) {
+                if ($contact->getSenderName() == null || $contact->getSenderName() == '') {
+                    $form->addError(new FormError($this->translator->trans('mango_sylius.contactForm.error.senderName')));
+                }
+            }
+            if ($this->phoneRequired !== false) {
+                if ($contact->getPhone() == null || $contact->getPhone() == '') {
+                    $form->addError(new FormError($this->translator->trans('mango_sylius.contactForm.error.phone')));
                 }
             }
             if ($form->isValid()) {

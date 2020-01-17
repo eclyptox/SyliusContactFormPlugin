@@ -35,17 +35,17 @@ Contact Form Plugin
 
     ```
    # Define if an email should be send to the manager when contact form is send
-    SEND_MANAGER_MAIL=
+    CONTACT_FORM_SEND_MANAGER_MAIL=
     # Define if an email should be send to the customer when contact form is send
-    SEND_CUSTOMER_MAIL=
+    CONTACT_FORM_SEND_CUSTOMER_MAIL=
     # Define 'name' field requirement in contact form
-    CONTACT_NAME_REQUIRED=
+    CONTACT_FORM_NAME_REQUIRED=
     # Define 'phone' field requirement in contact form
-    CONTACT_PHONE_REQUIRED=
+    CONTACT_FORM_PHONE_REQUIRED=
     # Recaptcha public key setter for contact form
-    RECAPTCHA_PUBLIC_KEY=
+    CONTACT_FORM_RECAPTCHA_PUBLIC_KEY=
     # Recaptcha secret key setter for contact form
-    RECAPTCHA_SECRET_KEY=
+    CONTACT_FORM_RECAPTCHA_SECRET_KEY=
     ```
    
 ## Usage
