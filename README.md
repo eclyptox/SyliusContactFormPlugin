@@ -34,7 +34,9 @@ Contact Form Plugin
 6. Define parameters in `.env` file
 
     ```
-    # Define if an email should be send to the customer
+   # Define if an email should be send to the manager when contact form is send
+    SEND_MANAGER_MAIL=
+    # Define if an email should be send to the customer when contact form is send
     SEND_CUSTOMER_MAIL=
     # Define 'name' field requirement in contact form
     CONTACT_NAME_REQUIRED=
