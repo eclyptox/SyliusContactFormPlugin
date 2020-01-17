@@ -11,6 +11,8 @@ use MangoSylius\SyliusContactFormPlugin\Repository\ContactMessageRepository;
 use ReCaptcha\ReCaptcha;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
+use Sylius\Component\Core\Model\Customer;
+use Sylius\Component\Core\Model\ShopUser;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 use Sylius\Component\User\Repository\UserRepositoryInterface;
 use Symfony\Component\Form\FormError;
@@ -20,6 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -45,6 +48,8 @@ final class ContactFormController
     private $channelContext;
     /** @var ContactMessageRepository */
     private $contactFormRepository;
+    /** @var TokenStorageInterface */
+    private $token;
 
     private $recaptchaPublic;
     private $recaptchaSecret;
@@ -60,6 +65,7 @@ final class ContactFormController
         UserRepositoryInterface $adminUserRepository,
         ChannelContextInterface $channelContext,
         ContactMessageRepository $contactFormRepository,
+        TokenStorageInterface $tokenStorage,
         string $recaptchaPublic,
         string $recaptchaSecret
     ) {
@@ -75,6 +81,7 @@ final class ContactFormController
         $this->contactFormRepository = $contactFormRepository;
         $this->recaptchaPublic = $recaptchaPublic;
         $this->recaptchaSecret = $recaptchaSecret;
+        $this->token = $tokenStorage;
     }
 
     public function showMessageAction(int $id)
@@ -89,6 +96,18 @@ final class ContactFormController
     public function createContactMessage(Request $request): Response
     {
         $contact = new ContactFormMessage();
+        $token = $this->token->getToken();
+        if ($token !== null) {
+            $user = $token->getUser();
+            if ($user !== null && $user instanceof ShopUser) {
+                $customer = $user->getCustomer();
+                assert($customer instanceof Customer);
+                $contact->setCustomer($customer);
+                $contact->setEmail($user->getEmail());
+                $contact->setSenderName($customer->getFirstName() . ' ' . $customer->getLastName());
+            }
+        }
+
         $form = $this->builder->create(ContactFormType::class, $contact, [
             'action' => $this->router->generate('mango_sylius_contact_form_message_send'),
             'method' => 'POST',

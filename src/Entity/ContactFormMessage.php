@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MangoSylius\SyliusContactFormPlugin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Sylius\Component\Core\Model\Customer;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -61,6 +62,12 @@ class ContactFormMessage implements ResourceInterface
      * @var \DateTime|null
      */
     protected $sendTime;
+
+    /**
+     * @var Customer|null
+     * @ORM\ManyToOne(targetEntity="Sylius\Component\Core\Model\Customer")
+     */
+    protected $customer;
 
     /**
      * @return int
@@ -156,5 +163,21 @@ class ContactFormMessage implements ResourceInterface
     public function setEmail(?string $email): void
     {
         $this->email = $email;
+    }
+
+    /**
+     * @return Customer|null
+     */
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param Customer|null $customer
+     */
+    public function setCustomer(?Customer $customer): void
+    {
+        $this->customer = $customer;
     }
 }
