@@ -11,6 +11,8 @@
             )) }}
         </div>
     </div>
-    {{ include('@MangoSyliusContactFormPlugin/ContactForm/recaptcha.html.twig') }}
 {% endblock %}
 
+{% block javascripts %}
+    {{ include('@MangoSyliusContactFormPlugin/ContactForm/recaptcha.html.twig') }}
+{% endblock %}
