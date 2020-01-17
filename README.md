@@ -30,7 +30,16 @@ Contact Form Plugin
 2. Register `\MangoSylius\ContactFormPlugin\MangoSyliusContactFormPlugin` in your Kernel.
 3. Import `@MangoSyliusContactFormPlugin/Resources/config/routing.yml` in the routing.yml.
 4. Import `@MangoSyliusContactFormPlugin/Resources/config/config.yml` in _sylius.yml.
+5. Include template `Resources/views/ContactForm/recaptcha.html.twig` in `@SyliusShop/Contact/request.html.twig`.
+6. Define parameters in `.env` file
 
+    ```
+    # Recaptcha public key setter for contact form
+    RECAPTCHA_PUBLIC_KEY=
+    # Recaptcha secret key setter for contact form
+    RECAPTCHA_SECRET_KEY=
+    ```
+   
 ## Usage
 
 * Log into admin panel

@@ -6,7 +6,9 @@ mango_sylius:
         phone: 'Phone'
         message: 'Message'
         success: 'The message was sent with success'
-        error: 'An error occurred when sending the message'
+        error:
+            form: 'An error occurred when sending the message'
+            recaptcha: 'recaptcha is not valid'
         time: 'Send at %time%'
         name: 'From %name%'
         subject:

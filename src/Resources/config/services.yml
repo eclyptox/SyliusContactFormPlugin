@@ -26,6 +26,8 @@ services:
       $adminUserRepository: '@sylius.repository.admin_user'
       $channelContext: '@sylius.context.channel'
       $contactFormRepository: '@mango_contact_form_plugin.repository.message'
+      $recaptchaPublic: '%env(string:RECAPTCHA_PUBLIC_KEY)%'
+      $recaptchaSecret: '%env(string:RECAPTCHA_SECRET_KEY)%'
 
 
 
