@@ -22,6 +22,16 @@ final class Configuration implements ConfigurationInterface
             $rootNode = $treeBuilder->root('mango_sylius_contact_form_plugin');
         }
 
+        $rootNode
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->booleanNode('send_manager_mail')->defaultFalse()->end()
+                ->booleanNode('send_customer_mail')->defaultFalse()->end()
+                ->booleanNode('name_required')->defaultFalse()->end()
+                ->booleanNode('phone_required')->defaultFalse()->end()
+            ->end()
+        ;
+
         return $treeBuilder;
     }
 }

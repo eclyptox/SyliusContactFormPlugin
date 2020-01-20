@@ -4,12 +4,13 @@ services:
     autoconfigure: false
     public: false
 
+  MangoSylius\SyliusContactFormPlugin\Service\ContactFormSettingsProvider: ~
+
   MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType:
     tags:
       - { name: form.type }
     arguments:
-      $nameRequired: '%env(bool:CONTACT_FORM_NAME_REQUIRED)%'
-      $phoneRequired: '%env(bool:CONTACT_FORM_PHONE_REQUIRED)%'
+      $contactFormSettings: '@MangoSylius\SyliusContactFormPlugin\Service\ContactFormSettingsProvider'
 
   MangoSylius\SyliusContactFormPlugin\Menu\ContactMenuBuilder:
     tags:
@@ -19,21 +20,18 @@ services:
     tags:
       - { name: controller.service_arguments }
     arguments:
+      $contactFormSettings: '@MangoSylius\SyliusContactFormPlugin\Service\ContactFormSettingsProvider'
+      $translator: '@translator'
+      $templatingEngine: '@templating'
+      $entityManager: '@doctrine.orm.entity_manager'
+      $mailer: '@sylius.email_sender'
       $router: '@router'
       $flashBag: '@session.flash_bag'
-      $translator: '@translator'
-      $entityManager: '@doctrine.orm.entity_manager'
-      $templatingEngine: '@templating'
       $builder: '@form.factory'
-      $mailer: '@sylius.email_sender'
       $adminUserRepository: '@sylius.repository.admin_user'
       $channelContext: '@sylius.context.channel'
       $contactFormRepository: '@mango_contact_form_plugin.repository.message'
       $tokenStorage: '@security.token_storage'
-      $nameRequired: '%env(bool:CONTACT_FORM_NAME_REQUIRED)%'
-      $phoneRequired: '%env(bool:CONTACT_FORM_PHONE_REQUIRED)%'
-      $sendManager: '%env(bool:CONTACT_FORM_SEND_MANAGER_MAIL)%'
-      $sendCustomer: '%env(bool:CONTACT_FORM_SEND_CUSTOMER_MAIL)%'
       $recaptchaPublic: '%env(string:CONTACT_FORM_RECAPTCHA_PUBLIC_KEY)%'
       $recaptchaSecret: '%env(string:CONTACT_FORM_RECAPTCHA_SECRET_KEY)%'
 

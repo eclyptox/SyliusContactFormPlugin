@@ -48,6 +48,19 @@ Contact Form Plugin
     CONTACT_FORM_RECAPTCHA_SECRET_KEY=
     ```
    
+## Configuration
+
+   ```
+  # Define if an email should be send to the manager when contact form is send
+   CONTACT_FORM_SEND_MANAGER_MAIL=
+   # Define if an email should be send to the customer when contact form is send
+   CONTACT_FORM_SEND_CUSTOMER_MAIL=
+   # Define 'name' field requirement in contact form
+   CONTACT_FORM_NAME_REQUIRED=
+   # Define 'phone' field requirement in contact form
+   CONTACT_FORM_PHONE_REQUIRED=
+   ```
+
 ## Usage
 
 * Log into admin panel

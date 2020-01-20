@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use MangoSylius\SyliusContactFormPlugin\Entity\ContactFormMessage;
 use MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType;
 use MangoSylius\SyliusContactFormPlugin\Repository\ContactMessageRepository;
+use MangoSylius\SyliusContactFormPlugin\Service\ContactFormSettingsProvider;
 use ReCaptcha\ReCaptcha;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
@@ -28,10 +29,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ContactFormController
 {
-    /** @var TranslatorInterface */
-    private $translator;
+    /** @var ContactFormSettingsProvider */
+    private $contactFormSettings;
     /** @var EngineInterface */
     private $templatingEngine;
+    /** @var TranslatorInterface */
+    private $translator;
     /** @var EntityManagerInterface */
     private $entityManager;
     /** @var SenderInterface */
@@ -50,22 +53,15 @@ final class ContactFormController
     private $contactFormRepository;
     /** @var TokenStorageInterface */
     private $token;
-    /** @var bool */
-    private $sendManager;
-    /** @var bool */
-    private $sendCustomer;
-    /** @var bool */
-    private $nameRequired;
-    /** @var bool */
-    private $phoneRequired;
     /** @var string */
     private $recaptchaPublic;
     /** @var string */
     private $recaptchaSecret;
 
     public function __construct(
-        TranslatorInterface $translator,
+        ContactFormSettingsProvider $contactFormSettings,
         EngineInterface $templatingEngine,
+        TranslatorInterface $translator,
         EntityManagerInterface $entityManager,
         SenderInterface $mailer,
         RouterInterface $router,
@@ -75,15 +71,12 @@ final class ContactFormController
         ChannelContextInterface $channelContext,
         ContactMessageRepository $contactFormRepository,
         TokenStorageInterface $tokenStorage,
-        bool $sendManager,
-        bool $sendCustomer,
-        bool $nameRequired,
-        bool $phoneRequired,
         string $recaptchaPublic,
         string $recaptchaSecret
     ) {
-        $this->translator = $translator;
+        $this->contactFormSettings = $contactFormSettings;
         $this->templatingEngine = $templatingEngine;
+        $this->translator = $translator;
         $this->entityManager = $entityManager;
         $this->mailer = $mailer;
         $this->router = $router;
@@ -93,10 +86,6 @@ final class ContactFormController
         $this->channelContext = $channelContext;
         $this->contactFormRepository = $contactFormRepository;
         $this->token = $tokenStorage;
-        $this->nameRequired = $nameRequired;
-        $this->phoneRequired = $phoneRequired;
-        $this->sendManager = $sendManager;
-        $this->sendCustomer = $sendCustomer;
         $this->recaptchaPublic = $recaptchaPublic;
         $this->recaptchaSecret = $recaptchaSecret;
     }
@@ -140,16 +129,6 @@ final class ContactFormController
                     $form->addError(new FormError($this->translator->trans('mango_sylius.contactForm.error.recaptcha')));
                 }
             }
-            if ($this->nameRequired !== false) {
-                if ($contact->getSenderName() == null || $contact->getSenderName() == '') {
-                    $form->addError(new FormError($this->translator->trans('mango_sylius.contactForm.error.senderName')));
-                }
-            }
-            if ($this->phoneRequired !== false) {
-                if ($contact->getPhone() == null || $contact->getPhone() == '') {
-                    $form->addError(new FormError($this->translator->trans('mango_sylius.contactForm.error.phone')));
-                }
-            }
             if ($form->isValid()) {
                 $contact->setSendTime(new \DateTime());
                 $this->entityManager->persist($contact);
@@ -159,10 +138,10 @@ final class ContactFormController
                 assert($channel instanceof ChannelInterface);
                 $contactEmail = $channel->getContactEmail();
 
-                if ($contactEmail !== null && $this->sendManager !== false) {
+                if ($contactEmail !== null && $this->contactFormSettings->isSendManager() !== false) {
                     $this->mailer->send('contact_shop_manager_mail', [$contactEmail], ['contact' => $contact]);
                 }
-                if ($this->sendCustomer !== false) {
+                if ($this->contactFormSettings->isSendCustomer() !== false) {
                     $this->mailer->send('contact_customer', [$contact->getEmail()], ['contact' => $contact]);
                 }
                 $this->flashBag->add('success', $this->translator->trans('mango_sylius.contactForm.success'));

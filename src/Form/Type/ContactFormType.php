@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MangoSylius\SyliusContactFormPlugin\Form\Type;
 
+use MangoSylius\SyliusContactFormPlugin\Service\ContactFormSettingsProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -13,15 +14,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ContactFormType extends AbstractType
 {
-    private $nameRequired;
-    private $phoneRequired;
+    /** @var ContactFormSettingsProvider */
+    private $contactFormSettings;
 
     public function __construct(
-        bool $nameRequired,
-        bool $phoneRequired
+        ContactFormSettingsProvider $contactFormSettings
     ) {
-        $this->nameRequired = $nameRequired;
-        $this->phoneRequired = $phoneRequired;
+        $this->contactFormSettings = $contactFormSettings;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -42,7 +41,7 @@ class ContactFormType extends AbstractType
                 ],
             ]);
 
-        if ($this->nameRequired !== false) {
+        if ($this->contactFormSettings->isNameRequired() !== false) {
             $builder
                 ->add('senderName', TextType::class, [
                     'label' => 'mango_sylius.contactForm.senderName',
@@ -59,7 +58,7 @@ class ContactFormType extends AbstractType
                 ]);
         }
 
-        if ($this->phoneRequired !== false) {
+        if ($this->contactFormSettings->isPhoneRequired() !== false) {
             $builder
                 ->add('phone', TelType::class, [
                     'label' => 'mango_sylius.contactForm.phone',
