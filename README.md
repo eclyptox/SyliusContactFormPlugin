@@ -34,14 +34,6 @@ Contact Form Plugin
 6. Define parameters in `.env` file
 
     ```
-   # Define if an email should be send to the manager when contact form is send
-    CONTACT_FORM_SEND_MANAGER_MAIL=
-    # Define if an email should be send to the customer when contact form is send
-    CONTACT_FORM_SEND_CUSTOMER_MAIL=
-    # Define 'name' field requirement in contact form
-    CONTACT_FORM_NAME_REQUIRED=
-    # Define 'phone' field requirement in contact form
-    CONTACT_FORM_PHONE_REQUIRED=
     # Recaptcha public key setter for contact form
     CONTACT_FORM_RECAPTCHA_PUBLIC_KEY=
     # Recaptcha secret key setter for contact form
@@ -49,16 +41,17 @@ Contact Form Plugin
     ```
    
 ## Configuration
-
+Set parameters in parameters.yml
    ```
-  # Define if an email should be send to the manager when contact form is send
-   CONTACT_FORM_SEND_MANAGER_MAIL=
-   # Define if an email should be send to the customer when contact form is send
-   CONTACT_FORM_SEND_CUSTOMER_MAIL=
-   # Define 'name' field requirement in contact form
-   CONTACT_FORM_NAME_REQUIRED=
-   # Define 'phone' field requirement in contact form
-   CONTACT_FORM_PHONE_REQUIRED=
+    mango_sylius_contact_form:
+        # Define if an email should be send to the manager when contact form is send
+          send_manager_mail: true/false
+        # Define if an email should be send to the customer when contact form is send
+          send_customer_mail: true/false
+        # Define 'name' field requirement in contact form
+          name_required: true/false
+        # Define 'phone' field requirement in contact form
+          phone_required: true/false
    ```
 
 ## Usage

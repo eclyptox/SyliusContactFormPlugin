@@ -1,5 +1,0 @@
-mango_sylius_contact_form:
-  send_manager_mail: false
-  send_customer_mail: false
-  name_required: false
-  phone_required: true
