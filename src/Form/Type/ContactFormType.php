@@ -48,9 +48,7 @@ class ContactFormType extends AbstractType
                 ->add('senderName', TextType::class, [
                     'label' => 'mango_sylius.contactForm.senderName',
                     'constraints' => [
-                        new NotBlank([
-                            'groups' => ['sylius']
-                        ]),
+                        new NotBlank(),
                     ],
                     'attr' => [
                         'placeholder' => 'mango_sylius.contactForm.required',
@@ -64,7 +62,6 @@ class ContactFormType extends AbstractType
                     'constraints' => [
                         new NotBlank([
                             'allowNull' => true,
-                            'groups' => ['sylius']
                         ]),
                     ],
                     'required' => false,
@@ -76,9 +73,7 @@ class ContactFormType extends AbstractType
                 ->add('phone', TelType::class, [
                     'label' => 'mango_sylius.contactForm.phone',
                     'constraints' => [
-                        new NotBlank([
-                            'groups' => ['sylius'],
-                        ]),
+                        new NotBlank(),
                     ],
                     'attr' => [
                         'placeholder' => 'mango_sylius.contactForm.required',
@@ -92,7 +87,6 @@ class ContactFormType extends AbstractType
                     'constraints' => [
                         new NotBlank([
                             'allowNull' => true,
-                            'groups' => ['sylius'],
                         ]),
                     ],
                     'required' => false,
