@@ -172,5 +172,4 @@ class ContactFormMessage implements ResourceInterface
     {
         $this->phone = $phone;
     }
-
 }
