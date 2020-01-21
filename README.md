@@ -30,7 +30,28 @@ Contact Form Plugin
 2. Register `\MangoSylius\ContactFormPlugin\MangoSyliusContactFormPlugin` in your Kernel.
 3. Import `@MangoSyliusContactFormPlugin/Resources/config/routing.yml` in the routing.yml.
 4. Import `@MangoSyliusContactFormPlugin/Resources/config/config.yml` in _sylius.yml.
-5. Include template `Resources/views/ContactForm/recaptcha.html.twig` in `@SyliusShop/Contact/request.html.twig`.
+5. Override the template in SyliusShopBundle:Contact:request.html.twig
+
+   ```twig
+   {% extends '@SyliusShop/layout.html.twig' %}
+   
+   {% form_theme form '@SyliusShop/Form/theme.html.twig' %}
+   
+   {% block content %}
+       <div class="ui hidden divider"></div>
+       <div class="ui two column centered stackable grid">
+           <div class="column">
+               {{ render(controller(
+                   'MangoSylius\\SyliusContactFormPlugin\\Controller\\ContactFormController::createContactMessage'
+               )) }}
+           </div>
+       </div>
+   {% endblock %}
+   
+   {% block javascripts %}
+       {{ include('@MangoSyliusContactFormPlugin/ContactForm/recaptcha.html.twig') }}
+   {% endblock %}
+    ```
 6. Define parameters in `.env` file
 
     ```

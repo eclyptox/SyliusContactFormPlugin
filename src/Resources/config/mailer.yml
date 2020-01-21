@@ -8,3 +8,6 @@ sylius_mailer:
       subject: 'Message sent'
       template: "@MangoSyliusContactFormPlugin/ContactForm/ContactFormCustomerEmail.html.twig"
 
+    contact_answer_mail:
+      subject: 'Message sent'
+      template: "@MangoSyliusContactFormPlugin/ContactForm/ContactFormAnswerEmail.html.twig"

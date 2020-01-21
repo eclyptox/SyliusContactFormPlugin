@@ -1,0 +1,8 @@
+<h4 class="ui dividing header">{{ 'mango_sylius.contactForm.title.answer'|trans }}</h4>
+<div class="ui form">
+    {{ form_start(form) }}
+    {{ form_row(form.message) }}
+    </br>
+    {{ form_row(form.sendMessage, { 'attr': {'class': 'large ui primary button'}}) }}
+    {{ form_end(form) }}
+</div>

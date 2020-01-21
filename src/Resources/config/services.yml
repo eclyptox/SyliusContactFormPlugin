@@ -12,9 +12,17 @@ services:
     arguments:
       $contactFormSettings: '@MangoSylius\SyliusContactFormPlugin\Service\ContactFormSettingsProvider'
 
-  MangoSylius\SyliusContactFormPlugin\Menu\ContactMenuBuilder:
+  MangoSylius\SyliusContactFormPlugin\Form\Type\ContactAnswerFormType:
+    tags:
+      - { name: form.type }
+
+  MangoSylius\SyliusContactFormPlugin\Menu\AdminContactMenuBuilder:
     tags:
       - { name: kernel.event_listener, event: sylius.menu.admin.main, method: buildMenu }
+
+  MangoSylius\SyliusContactFormPlugin\Menu\AccountContactMenuBuilder:
+    tags:
+      - { name: kernel.event_listener, event: sylius.menu.shop.account, method: BuildMenu }
 
   MangoSylius\SyliusContactFormPlugin\Controller\ContactFormController:
     tags:
@@ -30,7 +38,8 @@ services:
       $builder: '@form.factory'
       $adminUserRepository: '@sylius.repository.admin_user'
       $channelContext: '@sylius.context.channel'
-      $contactFormRepository: '@mango_contact_form_plugin.repository.message'
+      $contactMessageRepository: '@mango_contact_form_plugin.repository.message'
+      $contactAnswerRepository: '@mango_contact_form_plugin.repository.answer'
       $tokenStorage: '@security.token_storage'
       $recaptchaPublic: '%env(string:CONTACT_FORM_RECAPTCHA_PUBLIC_KEY)%'
       $recaptchaSecret: '%env(string:CONTACT_FORM_RECAPTCHA_SECRET_KEY)%'

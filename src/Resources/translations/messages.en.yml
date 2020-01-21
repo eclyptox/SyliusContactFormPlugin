@@ -1,6 +1,11 @@
 mango_sylius:
     contactForm:
-        title: 'contact form'
+        title:
+            contact: 'contact form'
+            answer: 'answer message'
+            customer:
+                index: 'Message History'
+                show: 'Message thread'
         required: 'Required'
         senderName: 'Name'
         email: 'Email'
@@ -17,6 +22,7 @@ mango_sylius:
         subject:
             shopManager: 'Message From %customerName%'
             customer: 'Message sent'
+            answer: 'New answer'
         ui:
             title: 'Messages'
             subtitle: 'Manage your messages'
@@ -27,6 +33,8 @@ mango_sylius:
             email: 'Email'
             phone: 'Phone'
             message: 'Message'
+        account:
+            name: 'Your message'
 
 mango_contact_form_plugin:
     ui:

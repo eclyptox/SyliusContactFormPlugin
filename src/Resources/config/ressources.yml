@@ -5,3 +5,9 @@ sylius_resource:
         model: MangoSylius\SyliusContactFormPlugin\Entity\ContactFormMessage
         form: MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType
         repository: MangoSylius\SyliusContactFormPlugin\Repository\ContactMessageRepository
+
+    mango_contact_form_plugin.answer:
+      classes:
+        model: MangoSylius\SyliusContactFormPlugin\Entity\ContactFormAnswer
+        form: MangoSylius\SyliusContactFormPlugin\Form\Type\ContactAnswerFormType
+        repository: MangoSylius\SyliusContactFormPlugin\Repository\ContactAnswerRepository
