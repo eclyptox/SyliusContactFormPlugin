@@ -23,15 +23,12 @@ class ContactFormMessage implements ResourceInterface
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
-
     /**
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=true)
      *
      * @var string|null
-     * @Assert\NotBlank
      */
     protected $senderName;
-
     /**
      * @ORM\Column(type="string", nullable=false)
      *
@@ -39,15 +36,12 @@ class ContactFormMessage implements ResourceInterface
      * @Assert\NotBlank
      */
     protected $email;
-
     /**
-     * @ORM\Column(type="string", length=50, nullable=false)
+     * @ORM\Column(type="string", length=50, nullable=true)
      *
      * @var string|null
-     * @Assert\NotBlank
      */
     protected $phone;
-
     /**
      * @ORM\Column(type="string", nullable=false)
      *
@@ -55,14 +49,12 @@ class ContactFormMessage implements ResourceInterface
      * @Assert\NotBlank
      */
     protected $message;
-
     /**
      * @ORM\Column(type="datetime")
      *
      * @var \DateTime|null
      */
     protected $sendTime;
-
     /**
      * @var Customer|null
      * @ORM\ManyToOne(targetEntity="Sylius\Component\Core\Model\Customer")
@@ -83,38 +75,6 @@ class ContactFormMessage implements ResourceInterface
     public function setId(int $id): void
     {
         $this->id = $id;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getSenderName(): ?string
-    {
-        return $this->senderName;
-    }
-
-    /**
-     * @param string|null $senderName
-     */
-    public function setSenderName(?string $senderName): void
-    {
-        $this->senderName = $senderName;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    /**
-     * @param string|null $phone
-     */
-    public function setPhone(?string $phone): void
-    {
-        $this->phone = $phone;
     }
 
     /**
@@ -179,5 +139,37 @@ class ContactFormMessage implements ResourceInterface
     public function setCustomer(?Customer $customer): void
     {
         $this->customer = $customer;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSenderName(): ?string
+    {
+        return $this->senderName;
+    }
+
+    /**
+     * @param string|null $senderName
+     */
+    public function setSenderName(?string $senderName): void
+    {
+        $this->senderName = $senderName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string|null $phone
+     */
+    public function setPhone(?string $phone): void
+    {
+        $this->phone = $phone;
     }
 }

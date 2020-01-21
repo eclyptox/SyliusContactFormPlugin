@@ -1,6 +1,7 @@
 mango_sylius:
     contactForm:
         title: 'contact form'
+        required: 'Required'
         senderName: 'Name'
         email: 'Email'
         phone: 'Phone'
@@ -9,6 +10,8 @@ mango_sylius:
         error:
             form: 'An error occurred when sending the message'
             recaptcha: 'recaptcha is not valid'
+            phone: 'Phone is required'
+            senderName: 'Name is required'
         time: 'Send at %time%'
         name: 'From %name%'
         subject:

@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use MangoSylius\SyliusContactFormPlugin\Entity\ContactFormMessage;
 use MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType;
 use MangoSylius\SyliusContactFormPlugin\Repository\ContactMessageRepository;
+use MangoSylius\SyliusContactFormPlugin\Service\ContactFormSettingsProviderInterface;
 use ReCaptcha\ReCaptcha;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
@@ -28,10 +29,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ContactFormController
 {
-    /** @var TranslatorInterface */
-    private $translator;
+    /** @var ContactFormSettingsProviderInterface */
+    private $contactFormSettings;
     /** @var EngineInterface */
     private $templatingEngine;
+    /** @var TranslatorInterface */
+    private $translator;
     /** @var EntityManagerInterface */
     private $entityManager;
     /** @var SenderInterface */
@@ -50,13 +53,15 @@ final class ContactFormController
     private $contactFormRepository;
     /** @var TokenStorageInterface */
     private $token;
-
+    /** @var string */
     private $recaptchaPublic;
+    /** @var string */
     private $recaptchaSecret;
 
     public function __construct(
-        TranslatorInterface $translator,
+        ContactFormSettingsProviderInterface $contactFormSettings,
         EngineInterface $templatingEngine,
+        TranslatorInterface $translator,
         EntityManagerInterface $entityManager,
         SenderInterface $mailer,
         RouterInterface $router,
@@ -69,8 +74,9 @@ final class ContactFormController
         string $recaptchaPublic,
         string $recaptchaSecret
     ) {
-        $this->translator = $translator;
+        $this->contactFormSettings = $contactFormSettings;
         $this->templatingEngine = $templatingEngine;
+        $this->translator = $translator;
         $this->entityManager = $entityManager;
         $this->mailer = $mailer;
         $this->router = $router;
@@ -79,9 +85,9 @@ final class ContactFormController
         $this->adminUserRepository = $adminUserRepository;
         $this->channelContext = $channelContext;
         $this->contactFormRepository = $contactFormRepository;
+        $this->token = $tokenStorage;
         $this->recaptchaPublic = $recaptchaPublic;
         $this->recaptchaSecret = $recaptchaSecret;
-        $this->token = $tokenStorage;
     }
 
     public function showMessageAction(int $id)
@@ -132,10 +138,12 @@ final class ContactFormController
                 assert($channel instanceof ChannelInterface);
                 $contactEmail = $channel->getContactEmail();
 
-                if ($contactEmail !== null) {
+                if ($contactEmail !== null && $this->contactFormSettings->isSendManager() !== false) {
                     $this->mailer->send('contact_shop_manager_mail', [$contactEmail], ['contact' => $contact]);
                 }
-                $this->mailer->send('contact_customer', [$contact->getEmail()], ['contact' => $contact]);
+                if ($this->contactFormSettings->isSendCustomer() !== false) {
+                    $this->mailer->send('contact_customer', [$contact->getEmail()], ['contact' => $contact]);
+                }
                 $this->flashBag->add('success', $this->translator->trans('mango_sylius.contactForm.success'));
             } else {
                 $this->flashBag->add('error', $this->translator->trans('mango_sylius.contactForm.error.form'));

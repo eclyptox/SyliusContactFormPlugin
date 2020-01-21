@@ -35,11 +35,25 @@ Contact Form Plugin
 
     ```
     # Recaptcha public key setter for contact form
-    RECAPTCHA_PUBLIC_KEY=
+    CONTACT_FORM_RECAPTCHA_PUBLIC_KEY=
     # Recaptcha secret key setter for contact form
-    RECAPTCHA_SECRET_KEY=
+    CONTACT_FORM_RECAPTCHA_SECRET_KEY=
     ```
    
+## Configuration
+Set parameters in parameters.yml
+   ```
+    mango_sylius_contact_form:
+        # Define if an email should be send to the manager when contact form is send
+          send_manager_mail: true/false
+        # Define if an email should be send to the customer when contact form is send
+          send_customer_mail: true/false
+        # Define 'name' field requirement in contact form
+          name_required: true/false
+        # Define 'phone' field requirement in contact form
+          phone_required: true/false
+   ```
+
 ## Usage
 
 * Log into admin panel
