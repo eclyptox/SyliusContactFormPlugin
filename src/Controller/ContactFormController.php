@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use MangoSylius\SyliusContactFormPlugin\Entity\ContactFormMessage;
 use MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType;
 use MangoSylius\SyliusContactFormPlugin\Repository\ContactMessageRepository;
-use MangoSylius\SyliusContactFormPlugin\Service\ContactFormSettingsProvider;
+use MangoSylius\SyliusContactFormPlugin\Service\ContactFormSettingsProviderInterface;
 use ReCaptcha\ReCaptcha;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
@@ -29,7 +29,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ContactFormController
 {
-    /** @var ContactFormSettingsProvider */
+    /** @var ContactFormSettingsProviderInterface */
     private $contactFormSettings;
     /** @var EngineInterface */
     private $templatingEngine;
@@ -59,7 +59,7 @@ final class ContactFormController
     private $recaptchaSecret;
 
     public function __construct(
-        ContactFormSettingsProvider $contactFormSettings,
+        ContactFormSettingsProviderInterface $contactFormSettings,
         EngineInterface $templatingEngine,
         TranslatorInterface $translator,
         EntityManagerInterface $entityManager,

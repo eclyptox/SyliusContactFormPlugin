@@ -26,8 +26,6 @@ class ContactFormMessage implements ResourceInterface
     /**
      * @ORM\Column(type="string", nullable=true)
      *
-     * @Assert\NotBlank
-     *
      * @var string|null
      */
     protected $senderName;
@@ -42,7 +40,6 @@ class ContactFormMessage implements ResourceInterface
      * @ORM\Column(type="string", length=50, nullable=true)
      *
      * @var string|null
-     * @Assert\NotBlank
      */
     protected $phone;
     /**
@@ -175,4 +172,5 @@ class ContactFormMessage implements ResourceInterface
     {
         $this->phone = $phone;
     }
+
 }

@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace MangoSylius\SyliusContactFormPlugin\Form\Type;
 
-use MangoSylius\SyliusContactFormPlugin\Service\ContactFormSettingsProvider;
+use MangoSylius\SyliusContactFormPlugin\Service\ContactFormSettingsProviderInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 
 class ContactFormType extends AbstractType
 {
-    /** @var ContactFormSettingsProvider */
+    /** @var ContactFormSettingsProviderInterface */
     private $contactFormSettings;
 
     public function __construct(
-        ContactFormSettingsProvider $contactFormSettings
+        ContactFormSettingsProviderInterface $contactFormSettings
     ) {
         $this->contactFormSettings = $contactFormSettings;
     }
@@ -36,15 +38,20 @@ class ContactFormType extends AbstractType
             ->add('message', TextareaType::class, [
                 'label' => '',
                 'attr' => [
-                    'placeholder' => 'mango_sylius.contactForm.message',
-                    'required' => true,
+                    'placeholder' => 'mango_sylius.contactForm.required',
                 ],
+                'required' => true,
             ]);
 
         if ($this->contactFormSettings->isNameRequired() !== false) {
             $builder
                 ->add('senderName', TextType::class, [
                     'label' => 'mango_sylius.contactForm.senderName',
+                    'constraints' => [
+                        new NotBlank([
+                            'groups' => ['sylius']
+                        ]),
+                    ],
                     'attr' => [
                         'placeholder' => 'mango_sylius.contactForm.required',
                     ],
@@ -54,6 +61,12 @@ class ContactFormType extends AbstractType
             $builder
                 ->add('senderName', TextType::class, [
                     'label' => 'mango_sylius.contactForm.senderName',
+                    'constraints' => [
+                        new NotBlank([
+                            'allowNull' => true,
+                            'groups' => ['sylius']
+                        ]),
+                    ],
                     'required' => false,
                 ]);
         }
@@ -62,6 +75,11 @@ class ContactFormType extends AbstractType
             $builder
                 ->add('phone', TelType::class, [
                     'label' => 'mango_sylius.contactForm.phone',
+                    'constraints' => [
+                        new NotBlank([
+                            'groups' => ['sylius'],
+                        ]),
+                    ],
                     'attr' => [
                         'placeholder' => 'mango_sylius.contactForm.required',
                     ],
@@ -71,6 +89,12 @@ class ContactFormType extends AbstractType
             $builder
                 ->add('phone', TelType::class, [
                     'label' => 'mango_sylius.contactForm.phone',
+                    'constraints' => [
+                        new NotBlank([
+                            'allowNull' => true,
+                            'groups' => ['sylius'],
+                        ]),
+                    ],
                     'required' => false,
                 ]);
         }
