@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace MangoSylius\SyliusContactFormPlugin\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use MangoSylius\SyliusContactFormPlugin\Entity\ContactFormAnswer;
 use MangoSylius\SyliusContactFormPlugin\Entity\ContactFormMessage;
+use MangoSylius\SyliusContactFormPlugin\Form\Type\ContactAnswerFormType;
 use MangoSylius\SyliusContactFormPlugin\Form\Type\ContactFormType;
+use MangoSylius\SyliusContactFormPlugin\Repository\ContactAnswerRepository;
 use MangoSylius\SyliusContactFormPlugin\Repository\ContactMessageRepository;
 use MangoSylius\SyliusContactFormPlugin\Service\ContactFormSettingsProviderInterface;
 use ReCaptcha\ReCaptcha;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
+use Sylius\Component\Core\Model\AdminUser;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\Customer;
 use Sylius\Component\Core\Model\ShopUser;
@@ -50,7 +54,9 @@ final class ContactFormController
     /** @var ChannelContextInterface */
     private $channelContext;
     /** @var ContactMessageRepository */
-    private $contactFormRepository;
+    private $contactMessageRepository;
+    /** @var ContactAnswerRepository */
+    private $contactAnswerRepository;
     /** @var TokenStorageInterface */
     private $token;
     /** @var string */
@@ -69,7 +75,8 @@ final class ContactFormController
         FormFactoryInterface $builder,
         UserRepositoryInterface $adminUserRepository,
         ChannelContextInterface $channelContext,
-        ContactMessageRepository $contactFormRepository,
+        ContactMessageRepository $contactMessageRepository,
+        ContactAnswerRepository $contactAnswerRepository,
         TokenStorageInterface $tokenStorage,
         string $recaptchaPublic,
         string $recaptchaSecret
@@ -84,7 +91,8 @@ final class ContactFormController
         $this->builder = $builder;
         $this->adminUserRepository = $adminUserRepository;
         $this->channelContext = $channelContext;
-        $this->contactFormRepository = $contactFormRepository;
+        $this->contactMessageRepository = $contactMessageRepository;
+        $this->contactAnswerRepository = $contactAnswerRepository;
         $this->token = $tokenStorage;
         $this->recaptchaPublic = $recaptchaPublic;
         $this->recaptchaSecret = $recaptchaSecret;
@@ -92,11 +100,34 @@ final class ContactFormController
 
     public function showMessageAction(int $id)
     {
-        $contactMessages = $this->contactFormRepository->find($id);
+        $contactMessages = $this->contactMessageRepository->find($id);
+        $contactAnswers = $this->contactAnswerRepository->findBy(['contactFormMessage' => $id]);
 
         return new Response($this->templatingEngine->render('@MangoSyliusContactFormPlugin/ContactForm/show.html.twig', [
             'message' => $contactMessages,
+            'answers' => $contactAnswers,
         ]));
+    }
+
+    public function showAccountMessageAction(int $id)
+    {
+        $token = $this->token->getToken();
+        assert($token !== null);
+        $user = $token->getUser();
+        assert($user !== null && $user instanceof ShopUser);
+        $customer = $user->getCustomer();
+        $contactMessage = $this->contactMessageRepository->find($id);
+        assert($contactMessage instanceof ContactFormMessage);
+        if ($customer === $contactMessage->getCustomer()) {
+            $contactAnswers = $this->contactAnswerRepository->findBy(['contactFormMessage' => $id]);
+
+            return new Response($this->templatingEngine->render('@MangoSyliusContactFormPlugin/ContactForm/Account/Show.html.twig', [
+                'message' => $contactMessage,
+                'answers' => $contactAnswers,
+            ]));
+        }
+
+        return new RedirectResponse($this->router->generate('mango_sylius_contact_form_shop_account_message_index'));
     }
 
     public function createContactMessage(Request $request): Response
@@ -152,9 +183,81 @@ final class ContactFormController
             return new RedirectResponse($this->router->generate('sylius_shop_contact_request'));
         }
 
-        return new Response($this->templatingEngine->render('@MangoSyliusContactFormPlugin/ContactForm/_form.html.twig', [
+        return new Response($this->templatingEngine->render('@MangoSyliusContactFormPlugin/ContactForm/Form/ContactForm.html.twig', [
             'form' => $form->createView(),
             'key' => $this->recaptchaPublic,
+        ]));
+    }
+
+    public function answerMessage(Request $request, int $id): Response
+    {
+        $contact = new ContactFormAnswer();
+        $form = $this->builder->create(ContactAnswerFormType::class, $contact, [
+            'action' => $this->router->generate('mango_sylius_contact_form_answer_send', ['id' => $id]),
+            'method' => 'POST',
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $token = $this->token->getToken();
+                $contactMessage = $this->contactMessageRepository->find($id);
+                $contact->setSendTime(new \DateTime());
+                assert($contactMessage instanceof ContactFormMessage);
+                $contact->setContactFormMessage($contactMessage);
+                assert($token && $token->getUser() instanceof AdminUser);
+                $sender = $token->getUser();
+                assert($sender instanceof AdminUser);
+                $contact->setSender($sender);
+                $this->entityManager->persist($contact);
+                $this->entityManager->flush();
+                $this->mailer->send('contact_answer_mail', [$contactMessage->getEmail()], ['contact' => $contact]);
+                $this->flashBag->add('success', $this->translator->trans('mango_sylius.contactForm.success'));
+            } else {
+                $this->flashBag->add('success', $this->translator->trans('mango_sylius.contactForm.error'));
+            }
+
+            return new RedirectResponse($this->router->generate('mango_sylius_admin_contact_show', ['id' => $id]));
+        }
+
+        return new Response($this->templatingEngine->render('@MangoSyliusContactFormPlugin/ContactForm/Form/AnswerForm.html.twig', [
+            'form' => $form->createView(),
+        ]));
+    }
+
+    public function accountAnswerMessage(Request $request, int $id): Response
+    {
+        $contact = new ContactFormAnswer();
+        $form = $this->builder->create(ContactAnswerFormType::class, $contact, [
+            'action' => $this->router->generate('mango_sylius_contact_form_account_answer_send', ['id' => $id]),
+            'method' => 'POST',
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $contactMessage = $this->contactMessageRepository->find($id);
+                $contact->setSendTime(new \DateTime());
+                assert($contactMessage instanceof ContactFormMessage);
+                $contact->setContactFormMessage($contactMessage);
+                $this->entityManager->persist($contact);
+                $this->entityManager->flush();
+
+                $channel = $this->channelContext->getChannel();
+                assert($channel instanceof ChannelInterface);
+                $contactEmail = $channel->getContactEmail();
+                $this->flashBag->add('success', $this->translator->trans('mango_sylius.contactForm.success'));
+            } else {
+                $this->flashBag->add('error', $this->translator->trans('mango_sylius.contactForm.error'));
+            }
+
+            return new RedirectResponse($this->router->generate('mango_sylius_contact_form_shop_account_message_show', ['id' => $id]));
+        }
+
+        return new Response($this->templatingEngine->render('@MangoSyliusContactFormPlugin/ContactForm/Form/AnswerForm.html.twig', [
+            'form' => $form->createView(),
         ]));
     }
 }

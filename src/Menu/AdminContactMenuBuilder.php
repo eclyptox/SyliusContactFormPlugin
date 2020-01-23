@@ -6,7 +6,7 @@ namespace MangoSylius\SyliusContactFormPlugin\Menu;
 
 use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
 
-final class ContactMenuBuilder
+final class AdminContactMenuBuilder
 {
     public function buildMenu(MenuBuilderEvent $event): void
     {

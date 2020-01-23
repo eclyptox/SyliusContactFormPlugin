@@ -3,6 +3,12 @@ mango_sylius_admin_contact_show:
   defaults:
     _controller: MangoSylius\SyliusContactFormPlugin\Controller\ContactFormController:showMessageAction
 
+mango_sylius_contact_form_answer_send:
+  path: contactform/{id}/send
+  methods: [POST]
+  defaults:
+    _controller: MangoSylius\SyliusContactFormPlugin\Controller\ContactFormController:answerMessage
+
 mango_sylius_admin_contact_message:
   resource: |
     alias: mango_contact_form_plugin.message

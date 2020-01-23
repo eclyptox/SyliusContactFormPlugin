@@ -1,0 +1,55 @@
+{% extends '@SyliusShop/Account/layout.html.twig' %}
+
+{% block title %}{{ 'mango_sylius.contactForm.ui.detailTitle'|trans ({'%contact%': message.senderName|first })}}{% endblock %}
+
+{% block breadcrumb %}
+<div class="ui breadcrumb">
+    <a href="{{ path('sylius_shop_homepage') }}" class="section">{{ 'sylius.ui.home'|trans }}</a>
+    <div class="divider"> / </div>
+    <a href="{{ path('sylius_shop_account_dashboard') }}" class="section">{{ 'sylius.ui.my_account'|trans }}</a>
+    <div class="divider"> / </div>
+    <a href="{{ path('mango_sylius_contact_form_shop_account_message_index') }}" class="section">{{ 'mango_sylius.contactForm.title.customer.index'|trans }}</a>
+    <div class="divider"> / </div>
+    <div class="active section">{{ 'mango_sylius.contactForm.title.customer.show'|trans }}</div>
+</div>
+{% endblock %}
+
+{% block subcontent %}
+
+    <h1 class="ui header">
+        {{ 'mango_sylius.contactForm.title.customer.show'|trans }}
+        <div class="sub header">{{ 'mango_sylius.contactForm.ui.subtitle'|trans }}</div>
+    </h1>
+
+    <div class="ui segment">
+        {{ 'mango_sylius.contactForm.account.name'|trans }}
+        </br></br>
+        {{ message.message }}
+        </br></br>
+        {{ 'mango_sylius.contactForm.time'|trans ({'%time%': message.sendTime|date('Y-m-d H:i:s') })}}
+    </div>
+
+    {% if answers%}
+        {% for answer in answers %}
+            <div class="ui segment">
+                {% if answer.sender %}
+                 {{ 'mango_sylius.contactForm.name'|trans ({'%name%' : answer.sender.username})}}
+                {% else %}
+                 {{ 'mango_sylius.contactForm.account.name'|trans }}
+                {% endif %}
+                </br></br>
+                {{ answer.message }}
+                </br></br>
+                {{ 'mango_sylius.contactForm.time'|trans ({'%time%': answer.sendTime|date('Y-m-d H:i:s') })}}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div id='ContactFormAnswer' class="ui segment">
+        {{ render(controller(
+            'MangoSylius\\SyliusContactFormPlugin\\Controller\\ContactFormController::accountAnswerMessage', {id: message.id|first}
+        )) }}
+    </div>
+
+
+{% endblock %}

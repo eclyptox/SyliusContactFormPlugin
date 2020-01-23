@@ -3,3 +3,7 @@ mango_sylius_contact_form_message_send:
   methods: [POST]
   defaults:
     _controller: MangoSylius\SyliusContactFormPlugin\Controller\ContactFormController:createContactMessage
+
+mango_sylius_contact_form_shop_account:
+  resource: "@MangoSyliusContactFormPlugin/Resources/config/accountRouting.yml"
+  prefix: /account

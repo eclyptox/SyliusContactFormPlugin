@@ -5,13 +5,34 @@
 {% block content %}
 
 
-        <div class="ui segment">
-            {{ 'mango_sylius.contactForm.name'|trans ({'%name%' : message.senderName})}}
-            </br></br>
-            {{ message.message }}
-            </br></br>
-            {{ 'mango_sylius.contactForm.time'|trans ({'%time%': message.sendTime|date('Y-m-d H:i:s') })}}
-        </div>
+    <div class="ui segment">
+        {{ 'mango_sylius.contactForm.name'|trans ({'%name%' : message.senderName})}}
+        </br></br>
+        {{ message.message }}
+        </br></br>
+        {{ 'mango_sylius.contactForm.time'|trans ({'%time%': message.sendTime|date('Y-m-d H:i:s') })}}
+    </div>
 
+    {% if answers%}
+        {% for answer in answers %}
+            <div class="ui segment">
+                {% if answer.sender %}
+                    {{ 'mango_sylius.contactForm.name'|trans ({'%name%' : answer.sender.username})}}
+                {% else %}
+                    {{ 'mango_sylius.contactForm.name'|trans ({'%name%' : message.senderName}) }}
+                {% endif %}
+                </br></br>
+                {{ answer.message }}
+                </br></br>
+                {{ 'mango_sylius.contactForm.time'|trans ({'%time%': answer.sendTime|date('Y-m-d H:i:s') })}}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div id='ContactFormAnswer' class="ui segment">
+        {{ render(controller(
+            'MangoSylius\\SyliusContactFormPlugin\\Controller\\ContactFormController::answerMessage', {id: message.id|first}
+        )) }}
+    </div>
 
 {% endblock %}
