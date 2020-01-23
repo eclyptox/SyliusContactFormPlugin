@@ -15,7 +15,7 @@
 
     {% if answers%}
         {% for answer in answers %}
-            <div class="ui segment">
+            <div class="ui segment messageAnswer">
                 {% if answer.sender %}
                     {{ 'mango_sylius.contactForm.name'|trans ({'%name%' : answer.sender.username})}}
                 {% else %}
