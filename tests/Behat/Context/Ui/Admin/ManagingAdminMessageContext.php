@@ -61,14 +61,6 @@ final class ManagingAdminMessageContext implements Context
     }
 
     /**
-     * @Then the message should be send to :arg1
-     */
-    public function theMessageShouldBeSendTo($arg1): void
-    {
-        Assert::true($this->emailChecker->hasRecipient($arg1));
-    }
-
-    /**
      * @Then I should be notified that the message as been created
      */
     public function iShouldBeNotifiedThatTheMessageAsBeenCreated(): void

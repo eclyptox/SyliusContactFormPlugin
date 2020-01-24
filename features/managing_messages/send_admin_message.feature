@@ -6,7 +6,7 @@ Feature: Send message
 
   Background:
     Given the store operates on a single channel in "United States"
-    And there is a customer "sylius@mangoweb.cz" that send a contact form
+    And there is a customer "sylius@mangoweb.eu" that submits a contact form
     And I am logged in as an administrator
 
   @ui @email
@@ -14,6 +14,6 @@ Feature: Send message
     When I view the summary of the message "1"
     And I write an answer message
     And I send the answer message
-    Then the message should be send to "sylius@mangoweb.cz"
+    Then an email should be sent to "sylius@mangoweb.cz"
     And I should be notified that the message as been created
     And I see the message created

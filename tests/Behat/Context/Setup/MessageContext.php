@@ -31,9 +31,9 @@ final class MessageContext implements Context
     }
 
     /**
-     * @Given there is a customer :customer that send a contact form
+     * @Given there is a customer :customer that submits a contact form
      */
-    public function thereIsACustomerThatSendAContactForm(Customer $customer)
+    public function thereIsACustomerThatSubmitsAContactForm(Customer $customer)
     {
         $message = new ContactFormMessage();
         $message->setSenderName($customer->getFullName());
@@ -44,6 +44,5 @@ final class MessageContext implements Context
         $message->setCustomer($customer);
         $this->entityManager->persist($message);
         $this->entityManager->flush();
-        $contactMessage = $this->entityManager->getRepository(ContactFormMessage::class)->find(1);
     }
 }
