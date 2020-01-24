@@ -52,7 +52,7 @@ script:
     - composer validate --strict
     - ls -la tests/Application/var/cache/test
     - bin/phpstan.sh
-    # - bin/behat.sh
+    - bin/behat.sh
     - bin/ecs.sh
 
 after_failure:
