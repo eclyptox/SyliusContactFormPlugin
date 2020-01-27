@@ -88,7 +88,10 @@ Contact Form Plugin
     # Recaptcha secret key setter for contact form
     CONTACT_FORM_RECAPTCHA_SECRET_KEY=
     ```
-   
+7. Create and run doctrine database migrations.
+
+For the guide how to use your own entity see [Sylius docs - Customizing Models](https://docs.sylius.com/en/1.6/customization/model.html)
+
 ## Configuration
 Set parameters in parameters.yml
    ```
