@@ -1,9 +1,9 @@
-acme_sylius_example_shop:
+mango_sylius_contact_form_shop:
     resource: "@MangoSyliusContactFormPlugin/Resources/config/shopRouting.yml"
     prefix: /{_locale}
     requirements:
         _locale: ^[a-z]{2}(?:_[A-Z]{2})?$
 
-acme_sylius_example_admin:
+mango_sylius_contact_form_admin:
     resource: "@MangoSyliusContactFormPlugin/Resources/config/adminRouting.yml"
     prefix: /admin

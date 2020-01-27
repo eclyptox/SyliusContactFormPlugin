@@ -27,9 +27,37 @@ Contact Form Plugin
 ## Installation
 
 1. Run `$ composer require mangoweb-sylius/sylius-contact-form-plugin`.
-2. Register `\MangoSylius\ContactFormPlugin\MangoSyliusContactFormPlugin` in your Kernel.
-3. Import `@MangoSyliusContactFormPlugin/Resources/config/routing.yml` in the routing.yml.
-4. Import `@MangoSyliusContactFormPlugin/Resources/config/config.yml` in _sylius.yml.
+2. Add plugin classes to your `config/bundles.php`:
+ 
+   ```php
+   return [
+      ...
+      MangoSylius\SyliusContactFormPlugin\MangoSyliusContactFormPlugin::class => ['all' => true],
+   ];
+   ```
+  
+3. Add resource to `config/packages/_sylius.yaml`
+
+    ```yaml
+    imports:
+         ...
+         - { resource: "@MangoSyliusContactFormPlugin/Resources/config/config.yml" }
+    ```
+   
+4. Add routing to `config/_routes.yaml`
+
+    ```yaml
+    mango_sylius_contact_form_shop:
+        resource: "@MangoSyliusContactFormPlugin/Resources/config/shopRouting.yml"
+        prefix: /{_locale}
+        requirements:
+            _locale: ^[a-z]{2}(?:_[A-Z]{2})?$
+    
+    mango_sylius_contact_form_admin:
+        resource: "@MangoSyliusContactFormPlugin/Resources/config/adminRouting.yml"
+        prefix: /admin
+    ```
+
 5. Override the template in SyliusShopBundle:Contact:request.html.twig
 
    ```twig
