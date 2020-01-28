@@ -35,7 +35,7 @@ class ContactFormType extends AbstractType
                 'required' => true,
             ])
             ->add('message', TextareaType::class, [
-                'label' => '',
+                'label' => 'mango_sylius.contactForm.message',
                 'attr' => [
                     'placeholder' => 'mango_sylius.contactForm.required',
                 ],
